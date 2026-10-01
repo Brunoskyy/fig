@@ -1,6 +1,6 @@
 # Migration plan
 
-Quayside 1.9.3, surveyed with `/fig:survey`. Legacy is one file, `legacy/app.js`, 473 lines, 14 routes. The service is `service/` (NestJS). Both use the same SQLite database during the migration; the edge (`edge/routes.yaml`) decides who answers.
+Quayside 1.9.3, surveyed with `/fig:survey`. Legacy is one file, `legacy/app.js`, 473 lines, 11 routes. The service is `service/` (NestJS). Both use the same SQLite database during the migration; the edge (`edge/routes.yaml`) decides who answers.
 
 | route | lines | rules | quirks | state | order |
 | --- | --- | --- | --- | --- | --- |

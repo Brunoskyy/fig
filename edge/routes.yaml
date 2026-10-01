@@ -1,6 +1,7 @@
 # Which system answers each route. Everything not listed goes to the default.
-# Changing a route to `service` is a flip: the guard hook only allows it when
-# the route's latest parity report passed against the current service code.
+# Each route is listed once. Changing a route to `service` is a flip: the
+# guard hook only allows it when the plan's approval matches its text and
+# parity passes when the guard runs it against the current service code.
 upstreams:
   legacy: http://127.0.0.1:4100
   service: http://127.0.0.1:4200
@@ -9,10 +10,10 @@ default: legacy
 routes:
   - match: 'GET /api/v1/ports'
     to: service
-    note: parity 8/8 on 2026-10-01
+    note: parity 13/13 on 2026-10-01
   - match: 'POST /api/v1/quote'
     to: service
-    note: parity 33/33 on 2026-10-01
+    note: parity 34/34 on 2026-10-01
   - match: 'GET /api/v1/bookings/:id'
     to: shadow
     note: parity 4 same + 2 accepted (Q9) on 2026-10-01; shadow until the mobile app reads the status code

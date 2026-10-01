@@ -19,12 +19,12 @@ sits in front, routes move to the new service one at a time, and each move is re
 Fig is that process packaged as a Claude Code plugin, with the parts that make it safe to hand to
 an agent. A parity harness records what the legacy system actually answers and replays it
 against the new code. Hooks keep the agent's hands off the legacy code, and they refuse a route
-flip unless a fresh parity report passed. A local search index over the legacy code makes every
-rule in a plan cite its lines, and an eval shows how often that search finds the right ones.
+flip unless parity passes when the hook runs it. A local search index over the legacy code makes
+every rule in a plan cite its lines, and an eval shows how often that search finds the right ones.
 
 The legacy system it migrates is in the repo. **Quayside** is a fictional shipping-quote API in
 2014 style, 473 lines in one `app.js`: Express callbacks, raw SQL, float dollars and twelve
-documented quirks. Three of its 14 routes are migrated. Two serve from the new service, and one
+documented quirks. Three of its 11 routes are migrated. Two serve from the new service, and one
 runs in shadow mode with a deliberate behaviour change.
 
 <p align="center">
@@ -104,15 +104,23 @@ fusion (k = 60). `QUIRKS.md` is not indexed, because it restates the rules in pl
 
 The hooks enforce what the skills only ask for:
 
-- **No edits under `legacy/`.** This covers Edit, Write and MultiEdit. It also covers shell
-  commands, through a small quote-aware parser that finds redirect targets, `sed -i`, `cp`,
-  `mv`, `git checkout` and similar. A post-command check hashes `legacy/` before and after every
-  Bash call and catches what the parser can't see, such as `node -e`.
-- **No flip without proof.** An edit that sends a route to `service` needs that route's latest
-  report to have passed. The report must also match the current hash of `service/src` and of the
-  recording. Changing the default or the upstreams is refused outright. The guard fails closed.
-- **No self-approval.** An `Approved-by:` line in a plan can't come from the agent, and neither
-  can `npm run approve`. You approve a plan by running it yourself (`! npm run approve -- quote`).
+- **No edits under `legacy/`.** This covers Edit, Write and MultiEdit, through symlinks and in
+  any letter case. It also covers shell commands, through a small quote-aware parser that finds
+  redirect targets, `sed -i`, `yq -i`, `cp`, `mv`, `git checkout` and similar, and follows `cd`.
+  A post-command check hashes the protected files before and after every Bash call and catches
+  what the parser can't see, such as `node -e`.
+- **No forged evidence.** Recordings, reports, the harness and the hooks can't be written by the
+  agent. Adding `accepted:` or `ignore:` entries to a corpus is the person's call, like an
+  approval.
+- **No flip without proof.** An edit that sends a route to `service` makes the guard record
+  legacy again, check that the recording on disk still matches, and replay the service itself.
+  It doesn't take a report's word for it. Changing the default or the upstreams is refused
+  outright. The guard fails closed: a crash, a missing dependency or a state file it can't
+  write blocks the call.
+- **No self-approval.** `npm run approve` records who approved and a hash of the plan text, and
+  a plan edited after that no longer counts as approved. The agent can't write those lines, edit
+  an approved plan or run the script, however it's spelled. You approve a plan by running it
+  yourself (`! npm run approve -- quote`).
 - **A journal.** Every tool call is appended to `migration/journal.md`, with local paths
   replaced by `.`. `npm run report` renders it, and the parity reports, as small HTML pages.
 
@@ -120,7 +128,7 @@ The hooks enforce what the skills only ask for:
 
 | route                                  | state   | parity             |
 | -------------------------------------- | ------- | ------------------ |
-| `GET /api/v1/ports` (the golden route) | service | 8 same             |
+| `GET /api/v1/ports` (the golden route) | service | 13 same            |
 | `POST /api/v1/quote`                   | service | 34 same            |
 | `GET /api/v1/bookings/:id`             | shadow  | 4 same, 2 accepted |
 
@@ -164,12 +172,12 @@ per-question ranks, is in `index/eval/runs/`.
 
 ## Things worth opening
 
-**`hooks/guard.mjs` and `hooks/lib.mjs`.** The guard turns an Edit's old and new strings into the
+**`hooks/policy.mjs` and `hooks/lib.mjs`.** The guard turns an Edit's old and new strings into the
 file it would leave behind, then diffs `routes.yaml` before and after to find flips. The shell
 parser is about 120 lines, and the comment above it says plainly what it can't do.
 
-**`parity/src/harness.ts`.** Record and replay, the freshness hashes the guard checks, and what
-"accepted" has to match before a difference is let through.
+**`parity/src/harness.ts`.** Record and replay, and what "accepted" has to match before a
+difference is let through. `verify.ts` is what the flip guard runs.
 
 **`service/src/quotes/pricing.ts`.** Legacy arithmetic reproduced on purpose, every constant
 named, and every kept quirk tagged with its number in `legacy/QUIRKS.md`.
@@ -184,18 +192,21 @@ but never proven.
 ## Tests
 
 ```bash
-npm test             # 55 tests
+npm test             # 81 tests
 npm run typecheck
 npm run lint
 ```
 
-The suites cover the edge with fake upstreams (headers, timeouts, 413, 502, shadow), parity and
-the diff, and a quote replay with a rule broken on purpose that must fail with a readable diff.
-They also cover an accepted 404 that becomes a 500 and must fail, and the pricing sweep against
-legacy. The index suite checks the chunker, BM25, fusion, gold-range validity and leakage. The
-hooks suite covers shell parsing, blocking with exit code 2, stale and failing reports, global
-routing changes, failing closed, the after-command check and the journal. CI runs all of it,
-plus parity, the hook dry run and the eval.
+The suites cover the edge with fake upstreams (headers, timeouts, 413, 502, shadow, request targets
+that name another host, callers that hang up, a shadow log that can't be written), parity and the
+diff, and a quote replay with a rule broken on purpose that must fail with a readable diff. They
+also cover an accepted 404 that becomes a 500 and must fail, and the pricing sweep against legacy.
+The index suite checks the chunker, BM25, fusion, gold-range validity and leakage. The hooks suite
+covers shell parsing, blocking with exit code 2, forged reports and recordings, a broken service,
+plans changed after approval, duplicate routes, symlinks and case, global routing changes, failing
+closed, the after-command check and the journal. The service suite covers query parsing against
+Express 4, logged 500s and the SQLite busy timeout. CI runs all of it, plus parity, the hook dry run
+and the eval.
 
 ## Layout
 
@@ -207,7 +218,7 @@ parity/          corpus/ (requests), golden/ (legacy answers), src/ (record, rep
 index/           src/ (chunker, BM25, embeddings, fusion), eval/ (questions, runs, RESULTS.md)
 .claude-plugin/  plugin manifest
 skills/ agents/  /fig:* skills and the rule-auditor agent
-hooks/           guard, legacy check, journal, hooks.json
+hooks/           guard, policy, after-command check, journal, hooks.json
 migration/       plan.md, routes/, parity/ reports, shadow/ log, journal.md
 scripts/         approve, hook dry run, shadow demo
 ```
