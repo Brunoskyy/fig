@@ -25,3 +25,5 @@ Where the pricing lives. Every rule here changes money partners reconcile agains
 Module service/src/quotes/: `pricing.ts` (pure, no Nest), `quote-request.ts` (validation), repository, service, controller. Mode after porting: service.
 
 ## Approval
+
+Approved-by: Artur Bruno on 2026-10-01

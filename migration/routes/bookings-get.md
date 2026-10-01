@@ -18,3 +18,5 @@ A plain lookup with one deliberate change, used to prove shadow mode.
 Module service/src/bookings/. Mode after porting: shadow. The mobile app reads `ok`, not the status code; it ships a fix in its next release, and the shadow log shows what the change would do to real traffic until then.
 
 ## Approval
+
+Approved-by: Artur Bruno on 2026-10-01
