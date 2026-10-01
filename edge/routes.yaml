@@ -1,0 +1,9 @@
+# Which system answers each route. Everything not listed goes to the default.
+# Changing a route to `service` is a flip: the guard hook only allows it when
+# the route's latest parity report passed against the current service code.
+upstreams:
+  legacy: http://127.0.0.1:4100
+  service: http://127.0.0.1:4200
+timeoutMs: 5000
+default: legacy
+routes: []
