@@ -13,7 +13,7 @@ The golden route: the first one ported, chosen because it has almost no rules. `
 - Q10 kept: the old agents portal still loads ports with a script tag.
 
 ## Parity cases
-- existing: all 8 in `parity/corpus/ports.yaml`, including the invalid callback and the repeated region.
+- existing: all 13 in `parity/corpus/ports.yaml`, including the invalid callback, the repeated region, and the bracketed and nested query keys added after review.
 
 ## Target
 Module service/src/ports/. Mode after porting: service.
@@ -22,3 +22,6 @@ Module service/src/ports/. Mode after porting: service.
 
 Approved-by: Artur Bruno on 2026-10-01
 Plan-hash: sha256:f96d6c9989ff64e1
+
+Approved-by: Artur Bruno on 2026-10-01
+Plan-hash: sha256:3f5dd49f952f96c8
