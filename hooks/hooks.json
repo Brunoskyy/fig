@@ -1,5 +1,5 @@
 {
-  "description": "Fig guards: legacy stays read-only, routes flip only on a fresh passing parity report, plan approvals come from a person. Every tool call is journaled.",
+  "description": "Fig guards: legacy, recordings, reports and the gate stay out of the agent's reach, routes flip only when parity passes as the guard runs it, plan approvals come from a person and bind to the plan text. Every tool call is journaled.",
   "hooks": {
     "PreToolUse": [
       {
@@ -8,7 +8,7 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/guard.mjs\"",
-            "timeout": 10
+            "timeout": 120
           }
         ]
       }

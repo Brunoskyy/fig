@@ -9,7 +9,7 @@ allowed-tools: Read, Grep, Glob, Write, Edit, Bash(npm run *), Bash(npx vitest *
 
 ## Before writing code
 
-1. Open `migration/routes/$ARGUMENTS.md`. It must end with an `Approved-by:` line. If it does not, stop and ask the person to review it. Do not port from an unapproved plan.
+1. Open `migration/routes/$ARGUMENTS.md`. It must end with an `Approved-by:` line and a `Plan-hash:` line written by `npm run approve`. If it does not, stop and ask the person to review it. Do not port from an unapproved plan, and do not edit an approved one: the guard refuses it, and the flip check refuses a plan that changed after approval.
 2. Read the golden route end to end: `service/src/ports/` (module, controller) and how it is wired in `service/src/app.ts`. Match its shape. It is the reference for naming, injection with explicit `@Inject(token)` (the build has no decorator metadata), and error handling through `service/src/common/legacy-errors.ts`.
 3. Read every legacy line the plan cites. The plan is a map, not a substitute.
 

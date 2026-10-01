@@ -20,3 +20,4 @@ Module service/src/bookings/. Mode after porting: shadow. The mobile app reads `
 ## Approval
 
 Approved-by: Artur Bruno on 2026-10-01
+Plan-hash: sha256:ab0d7c91126268d2

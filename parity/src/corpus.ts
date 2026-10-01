@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { readdirSync, readFileSync } from 'node:fs'
+import { lstatSync, readdirSync, readFileSync, readlinkSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
 import { parse } from 'yaml'
@@ -77,16 +77,23 @@ export function routeForMatch(match: string): string | null {
   return null
 }
 
+// Same walk and hash as hooks/lib.mjs: node_modules and .git skipped,
+// symlinks hashed as links. A test keeps the two in step.
 function walk(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true })
-    .flatMap((e) => (e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)]))
+    .flatMap((e) => {
+      const p = join(dir, e.name)
+      if (e.isDirectory()) return e.name === 'node_modules' || e.name === '.git' ? [] : walk(p)
+      return e.isFile() || e.isSymbolicLink() ? [p] : []
+    })
     .sort()
 }
 
 export function hashFiles(files: string[]): string {
   const h = createHash('sha256')
-  for (const f of files) {
-    h.update(relative(ROOT, f)).update('\0').update(readFileSync(f)).update('\0')
+  for (const f of [...files].sort()) {
+    const content = lstatSync(f).isSymbolicLink() ? `symlink:${readlinkSync(f)}` : readFileSync(f)
+    h.update(relative(ROOT, f)).update('\0').update(content).update('\0')
   }
   return h.digest('hex').slice(0, 16)
 }

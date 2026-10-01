@@ -27,3 +27,4 @@ Module service/src/quotes/: `pricing.ts` (pure, no Nest), `quote-request.ts` (va
 ## Approval
 
 Approved-by: Artur Bruno on 2026-10-01
+Plan-hash: sha256:0347a28b297c5fee

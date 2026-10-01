@@ -15,6 +15,7 @@
     "edge": "tsx edge/src/main.ts",
     "record": "tsx parity/src/cli/record.ts",
     "parity": "tsx parity/src/cli/parity.ts",
+    "verify": "tsx parity/src/cli/verify.ts",
     "report": "tsx parity/src/cli/report.ts",
     "index:build": "tsx index/src/cli/build.ts",
     "index:query": "tsx index/src/cli/query.ts",

@@ -21,3 +21,4 @@ Module service/src/ports/. Mode after porting: service.
 ## Approval
 
 Approved-by: Artur Bruno on 2026-10-01
+Plan-hash: sha256:f96d6c9989ff64e1

@@ -39,4 +39,4 @@ Mode after porting: <service | shadow, and why>
 ## Approval
 ```
 
-Leave the Approval section empty. Approval is the person's: tell them the plan is ready and that they approve it by running `npm run approve -- $ARGUMENTS` themselves (in Claude Code, `! npm run approve -- $ARGUMENTS`). The hooks block you from writing an `Approved-by:` line or running that command, so do not try.
+Leave the Approval section empty. Approval is the person's: tell them the plan is ready and that they approve it by running `npm run approve -- $ARGUMENTS` themselves (in Claude Code, `! npm run approve -- $ARGUMENTS`). It records who approved and a hash of the plan text. The hooks block you from writing those lines, running that command, or editing the plan once it is approved, so do not try.
