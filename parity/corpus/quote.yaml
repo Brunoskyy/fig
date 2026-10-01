@@ -1,0 +1,68 @@
+# POST /api/v1/quote: every pricing rule in QUIRKS.md, plus the validation
+# order. The clock is frozen at 2016-11-20T10:00:00Z for both sides.
+match: POST /api/v1/quote
+cases:
+  - name: plain 20DV quote
+    body: { from: NLRTM, to: USNYC, container: 20DV, depart: '2016-11-29' }
+  - name: lowercase codes and container
+    body: { from: nlrtm, to: usnyc, container: 40hc, depart: '2016-11-29' }
+  - name: reverse lane costs 5% more (Q1)
+    body: { from: USNYC, to: NLRTM, container: 20DV, depart: '2016-11-29' }
+  - name: weight exactly at the free limit (Q2)
+    body: { from: DEHAM, to: USSAV, container: 40DV, weight: 20000, depart: '2016-11-29' }
+  - name: weight one kilo over the limit (Q2)
+    body: { from: DEHAM, to: USSAV, container: 40DV, weight: 20001, depart: '2016-11-29' }
+  - name: weight typed with a unit (Q3)
+    body: { from: DEHAM, to: USSAV, container: 40DV, weight: '21500kg', depart: '2016-11-29' }
+  - name: weight that is not a number (Q3)
+    body: { from: DEHAM, to: USSAV, container: 40DV, weight: heavy, depart: '2016-11-29' }
+  - name: overweight
+    body: { from: DEHAM, to: USSAV, container: 20DV, weight: 28500, depart: '2016-11-29' }
+  - name: hazardous surcharge is 18% of base (Q4)
+    body: { from: BRPEC, to: ESVLC, container: 20DV, hazardous: Y, depart: '2016-11-29' }
+  - name: hazardous for a gold customer is not discounted (Q4)
+    body: { from: NLRTM, to: USNYC, container: 40HC, hazardous: 'true', customer: 2, depart: '2016-11-29' }
+  - name: weekend departure
+    body: { from: NLRTM, to: USNYC, container: 20DV, depart: '2016-11-26' }
+  - name: peak season starts December 1st
+    body: { from: CNSHA, to: DEHAM, container: 40HC, depart: '2016-12-01' }
+  - name: January 14th is still peak (Q5)
+    body: { from: CNSHA, to: DEHAM, container: 40HC, depart: '2017-01-14' }
+  - name: January 15th is not (Q5)
+    body: { from: CNSHA, to: DEHAM, container: 40HC, depart: '2017-01-15' }
+  - name: everything at once, rounding up to 5 cents (Q6)
+    body: { from: nlrtm, to: usnyc, container: 40hc, weight: 21500kg, hazardous: Y, depart: '2016-12-03', customer: 2 }
+  - name: fuel month missing falls back to the previous one (Q8)
+    body: { from: USNYC, to: NLRTM, container: 20DV, depart: '2017-02-10' }
+  - name: fuel month before the table starts
+    body: { from: NLRTM, to: USNYC, container: 20DV, depart: '2015-06-01' }
+  - name: hazardous flag spellings (Q4)
+    body: { from: BRPEC, to: ESVLC, container: 20DV, hazardous: 1, depart: '2016-11-29' }
+  - name: hazardous "N" is false
+    body: { from: BRPEC, to: ESVLC, container: 20DV, hazardous: N, depart: '2016-11-29' }
+  - name: customer as a string
+    body: { from: NLRTM, to: USNYC, container: 20DV, customer: '4', depart: '2016-11-29' }
+  - name: unknown customer
+    body: { from: NLRTM, to: USNYC, container: 20DV, customer: 99, depart: '2016-11-29' }
+  - name: no lane
+    body: { from: SGSIN, to: ARBUE, container: 20DV, depart: '2016-11-29' }
+  - name: overweight is checked before the customer
+    body: { from: NLRTM, to: USNYC, container: 20DV, weight: 40000, customer: 99, depart: '2016-11-29' }
+  - name: missing from (Q11)
+    body: { to: USNYC, container: 20DV, depart: '2016-11-29' }
+  - name: missing everything reports from first (Q11)
+    body: {}
+  - name: unknown container (Q11)
+    body: { from: NLRTM, to: USNYC, container: 53FT, depart: '2016-11-29' }
+  - name: bad date (Q11)
+    body: { from: NLRTM, to: USNYC, container: 20DV, depart: 29/11/2016 }
+  - name: February 30th rolls over to March 1st (Q11)
+    body: { from: NLRTM, to: USNYC, container: 20DV, depart: '2016-02-30' }
+  - name: array body
+    body: []
+  - name: malformed JSON
+    raw: '{"from": "NLRTM",'
+  - name: second quote gets the next id
+    body: { from: BRSSZ, to: NLRTM, container: 40DV, depart: '2016-11-29' }
+  - name: reefer on a reverse lane
+    body: { from: NLRTM, to: BRSSZ, container: 20RF, weight: 23999, depart: '2016-12-24', customer: 4 }

@@ -1,0 +1,99 @@
+{
+  "route": "bookings-get",
+  "match": "GET /api/v1/bookings/:id",
+  "recordedAt": "2026-10-01T11:12:33.283Z",
+  "clock": "2016-11-20T10:00:00Z",
+  "corpusHash": "48d7a613af246681",
+  "cases": [
+    {
+      "name": "confirmed booking",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/bookings/1",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"booking\":{\"id\":1,\"quote\":1,\"customer\":2,\"status\":\"CONFIRMED\",\"created\":\"2016-11-18 09:20:13\",\"cancelled\":null,\"fee\":null}}"
+      }
+    },
+    {
+      "name": "cancelled booking with a fee",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/bookings/2",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"booking\":{\"id\":2,\"quote\":2,\"customer\":null,\"status\":\"CANCELLED\",\"created\":\"2016-11-19 16:45:00\",\"cancelled\":\"2016-11-20 08:01:59\",\"fee\":1225.78}}"
+      }
+    },
+    {
+      "name": "cancelled row with an empty timestamp (legacy data)",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/bookings/3",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"booking\":{\"id\":3,\"quote\":1,\"customer\":2,\"status\":\"CANCELLED\",\"created\":\"2016-11-17 10:00:00\",\"cancelled\":null,\"fee\":0}}"
+      }
+    },
+    {
+      "name": "id with trailing junk is parsed like parseInt",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/bookings/2abc",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"booking\":{\"id\":2,\"quote\":2,\"customer\":null,\"status\":\"CANCELLED\",\"created\":\"2016-11-19 16:45:00\",\"cancelled\":\"2016-11-20 08:01:59\",\"fee\":1225.78}}"
+      }
+    },
+    {
+      "name": "missing booking (Q9, fixed on purpose)",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/bookings/404",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":false,\"err\":\"NOT_FOUND\"}"
+      }
+    },
+    {
+      "name": "id that is not a number (Q9, fixed on purpose)",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/bookings/latest",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":false,\"err\":\"NOT_FOUND\"}"
+      }
+    }
+  ]
+}

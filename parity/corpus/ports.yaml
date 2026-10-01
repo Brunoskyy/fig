@@ -1,0 +1,20 @@
+# GET /api/v1/ports, the golden route: the first one ported, and the one
+# /fig:port points at as the example to follow.
+match: GET /api/v1/ports
+cases:
+  - name: all ports, ordered by name
+    path: /api/v1/ports
+  - name: region filter
+    path: /api/v1/ports?region=EU
+  - name: region filter is case-insensitive
+    path: /api/v1/ports?region=sa
+  - name: unknown region is an empty list, not an error
+    path: /api/v1/ports?region=MARS
+  - name: empty region means no filter
+    path: /api/v1/ports?region=
+  - name: JSONP for the old agents portal (Q10)
+    path: /api/v1/ports?region=NA&callback=loadPorts
+  - name: JSONP callback that is not an identifier is ignored
+    path: /api/v1/ports?callback=alert(1)//
+  - name: repeated region (Express makes it an array)
+    path: /api/v1/ports?region=EU&region=AS

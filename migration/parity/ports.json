@@ -1,0 +1,208 @@
+{
+  "route": "ports",
+  "match": "GET /api/v1/ports",
+  "passed": true,
+  "ranAt": "2026-10-01T11:12:33.901Z",
+  "serviceHash": "4c9e08d2356589d4",
+  "goldenHash": "a02b5d7e18fa7cbe",
+  "ignored": [],
+  "counts": {
+    "same": 8,
+    "accepted": 0,
+    "different": 0
+  },
+  "cases": [
+    {
+      "name": "all ports, ordered by name",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports",
+        "headers": {}
+      },
+      "outcome": "same",
+      "differences": [],
+      "legacy": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":12,\"ports\":[{\"code\":\"BEANR\",\"name\":\"Antwerp\",\"country\":\"BE\",\"region\":\"EU\"},{\"code\":\"ARBUE\",\"name\":\"Buenos Aires\",\"country\":\"AR\",\"region\":\"SA\"},{\"code\":\"CAHAL\",\"name\":\"Halifax\",\"country\":\"CA\",\"region\":\"NA\"},{\"code\":\"DEHAM\",\"name\":\"Hamburg\",\"country\":\"DE\",\"region\":\"EU\"},{\"code\":\"USNYC\",\"name\":\"New York\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"BRPEC\",\"name\":\"Pecem\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"NLRTM\",\"name\":\"Rotterdam\",\"country\":\"NL\",\"region\":\"EU\"},{\"code\":\"BRSSZ\",\"name\":\"Santos\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"USSAV\",\"name\":\"Savannah\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"CNSHA\",\"name\":\"Shanghai\",\"country\":\"CN\",\"region\":\"ASIA\"},{\"code\":\"SGSIN\",\"name\":\"Singapore\",\"country\":\"SG\",\"region\":\"ASIA\"},{\"code\":\"ESVLC\",\"name\":\"Valencia\",\"country\":\"ES\",\"region\":\"EU\"}]}"
+      },
+      "service": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":12,\"ports\":[{\"code\":\"BEANR\",\"name\":\"Antwerp\",\"country\":\"BE\",\"region\":\"EU\"},{\"code\":\"ARBUE\",\"name\":\"Buenos Aires\",\"country\":\"AR\",\"region\":\"SA\"},{\"code\":\"CAHAL\",\"name\":\"Halifax\",\"country\":\"CA\",\"region\":\"NA\"},{\"code\":\"DEHAM\",\"name\":\"Hamburg\",\"country\":\"DE\",\"region\":\"EU\"},{\"code\":\"USNYC\",\"name\":\"New York\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"BRPEC\",\"name\":\"Pecem\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"NLRTM\",\"name\":\"Rotterdam\",\"country\":\"NL\",\"region\":\"EU\"},{\"code\":\"BRSSZ\",\"name\":\"Santos\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"USSAV\",\"name\":\"Savannah\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"CNSHA\",\"name\":\"Shanghai\",\"country\":\"CN\",\"region\":\"ASIA\"},{\"code\":\"SGSIN\",\"name\":\"Singapore\",\"country\":\"SG\",\"region\":\"ASIA\"},{\"code\":\"ESVLC\",\"name\":\"Valencia\",\"country\":\"ES\",\"region\":\"EU\"}]}"
+      }
+    },
+    {
+      "name": "region filter",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?region=EU",
+        "headers": {}
+      },
+      "outcome": "same",
+      "differences": [],
+      "legacy": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":4,\"ports\":[{\"code\":\"BEANR\",\"name\":\"Antwerp\",\"country\":\"BE\",\"region\":\"EU\"},{\"code\":\"DEHAM\",\"name\":\"Hamburg\",\"country\":\"DE\",\"region\":\"EU\"},{\"code\":\"NLRTM\",\"name\":\"Rotterdam\",\"country\":\"NL\",\"region\":\"EU\"},{\"code\":\"ESVLC\",\"name\":\"Valencia\",\"country\":\"ES\",\"region\":\"EU\"}]}"
+      },
+      "service": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":4,\"ports\":[{\"code\":\"BEANR\",\"name\":\"Antwerp\",\"country\":\"BE\",\"region\":\"EU\"},{\"code\":\"DEHAM\",\"name\":\"Hamburg\",\"country\":\"DE\",\"region\":\"EU\"},{\"code\":\"NLRTM\",\"name\":\"Rotterdam\",\"country\":\"NL\",\"region\":\"EU\"},{\"code\":\"ESVLC\",\"name\":\"Valencia\",\"country\":\"ES\",\"region\":\"EU\"}]}"
+      }
+    },
+    {
+      "name": "region filter is case-insensitive",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?region=sa",
+        "headers": {}
+      },
+      "outcome": "same",
+      "differences": [],
+      "legacy": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":3,\"ports\":[{\"code\":\"ARBUE\",\"name\":\"Buenos Aires\",\"country\":\"AR\",\"region\":\"SA\"},{\"code\":\"BRPEC\",\"name\":\"Pecem\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"BRSSZ\",\"name\":\"Santos\",\"country\":\"BR\",\"region\":\"SA\"}]}"
+      },
+      "service": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":3,\"ports\":[{\"code\":\"ARBUE\",\"name\":\"Buenos Aires\",\"country\":\"AR\",\"region\":\"SA\"},{\"code\":\"BRPEC\",\"name\":\"Pecem\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"BRSSZ\",\"name\":\"Santos\",\"country\":\"BR\",\"region\":\"SA\"}]}"
+      }
+    },
+    {
+      "name": "unknown region is an empty list, not an error",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?region=MARS",
+        "headers": {}
+      },
+      "outcome": "same",
+      "differences": [],
+      "legacy": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":0,\"ports\":[]}"
+      },
+      "service": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":0,\"ports\":[]}"
+      }
+    },
+    {
+      "name": "empty region means no filter",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?region=",
+        "headers": {}
+      },
+      "outcome": "same",
+      "differences": [],
+      "legacy": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":12,\"ports\":[{\"code\":\"BEANR\",\"name\":\"Antwerp\",\"country\":\"BE\",\"region\":\"EU\"},{\"code\":\"ARBUE\",\"name\":\"Buenos Aires\",\"country\":\"AR\",\"region\":\"SA\"},{\"code\":\"CAHAL\",\"name\":\"Halifax\",\"country\":\"CA\",\"region\":\"NA\"},{\"code\":\"DEHAM\",\"name\":\"Hamburg\",\"country\":\"DE\",\"region\":\"EU\"},{\"code\":\"USNYC\",\"name\":\"New York\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"BRPEC\",\"name\":\"Pecem\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"NLRTM\",\"name\":\"Rotterdam\",\"country\":\"NL\",\"region\":\"EU\"},{\"code\":\"BRSSZ\",\"name\":\"Santos\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"USSAV\",\"name\":\"Savannah\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"CNSHA\",\"name\":\"Shanghai\",\"country\":\"CN\",\"region\":\"ASIA\"},{\"code\":\"SGSIN\",\"name\":\"Singapore\",\"country\":\"SG\",\"region\":\"ASIA\"},{\"code\":\"ESVLC\",\"name\":\"Valencia\",\"country\":\"ES\",\"region\":\"EU\"}]}"
+      },
+      "service": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":12,\"ports\":[{\"code\":\"BEANR\",\"name\":\"Antwerp\",\"country\":\"BE\",\"region\":\"EU\"},{\"code\":\"ARBUE\",\"name\":\"Buenos Aires\",\"country\":\"AR\",\"region\":\"SA\"},{\"code\":\"CAHAL\",\"name\":\"Halifax\",\"country\":\"CA\",\"region\":\"NA\"},{\"code\":\"DEHAM\",\"name\":\"Hamburg\",\"country\":\"DE\",\"region\":\"EU\"},{\"code\":\"USNYC\",\"name\":\"New York\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"BRPEC\",\"name\":\"Pecem\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"NLRTM\",\"name\":\"Rotterdam\",\"country\":\"NL\",\"region\":\"EU\"},{\"code\":\"BRSSZ\",\"name\":\"Santos\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"USSAV\",\"name\":\"Savannah\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"CNSHA\",\"name\":\"Shanghai\",\"country\":\"CN\",\"region\":\"ASIA\"},{\"code\":\"SGSIN\",\"name\":\"Singapore\",\"country\":\"SG\",\"region\":\"ASIA\"},{\"code\":\"ESVLC\",\"name\":\"Valencia\",\"country\":\"ES\",\"region\":\"EU\"}]}"
+      }
+    },
+    {
+      "name": "JSONP for the old agents portal (Q10)",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?region=NA&callback=loadPorts",
+        "headers": {}
+      },
+      "outcome": "same",
+      "differences": [],
+      "legacy": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/javascript; charset=utf-8"
+        },
+        "body": "loadPorts({\"ok\":true,\"count\":3,\"ports\":[{\"code\":\"CAHAL\",\"name\":\"Halifax\",\"country\":\"CA\",\"region\":\"NA\"},{\"code\":\"USNYC\",\"name\":\"New York\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"USSAV\",\"name\":\"Savannah\",\"country\":\"US\",\"region\":\"NA\"}]});"
+      },
+      "service": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/javascript; charset=utf-8"
+        },
+        "body": "loadPorts({\"ok\":true,\"count\":3,\"ports\":[{\"code\":\"CAHAL\",\"name\":\"Halifax\",\"country\":\"CA\",\"region\":\"NA\"},{\"code\":\"USNYC\",\"name\":\"New York\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"USSAV\",\"name\":\"Savannah\",\"country\":\"US\",\"region\":\"NA\"}]});"
+      }
+    },
+    {
+      "name": "JSONP callback that is not an identifier is ignored",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?callback=alert(1)//",
+        "headers": {}
+      },
+      "outcome": "same",
+      "differences": [],
+      "legacy": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":12,\"ports\":[{\"code\":\"BEANR\",\"name\":\"Antwerp\",\"country\":\"BE\",\"region\":\"EU\"},{\"code\":\"ARBUE\",\"name\":\"Buenos Aires\",\"country\":\"AR\",\"region\":\"SA\"},{\"code\":\"CAHAL\",\"name\":\"Halifax\",\"country\":\"CA\",\"region\":\"NA\"},{\"code\":\"DEHAM\",\"name\":\"Hamburg\",\"country\":\"DE\",\"region\":\"EU\"},{\"code\":\"USNYC\",\"name\":\"New York\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"BRPEC\",\"name\":\"Pecem\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"NLRTM\",\"name\":\"Rotterdam\",\"country\":\"NL\",\"region\":\"EU\"},{\"code\":\"BRSSZ\",\"name\":\"Santos\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"USSAV\",\"name\":\"Savannah\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"CNSHA\",\"name\":\"Shanghai\",\"country\":\"CN\",\"region\":\"ASIA\"},{\"code\":\"SGSIN\",\"name\":\"Singapore\",\"country\":\"SG\",\"region\":\"ASIA\"},{\"code\":\"ESVLC\",\"name\":\"Valencia\",\"country\":\"ES\",\"region\":\"EU\"}]}"
+      },
+      "service": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":12,\"ports\":[{\"code\":\"BEANR\",\"name\":\"Antwerp\",\"country\":\"BE\",\"region\":\"EU\"},{\"code\":\"ARBUE\",\"name\":\"Buenos Aires\",\"country\":\"AR\",\"region\":\"SA\"},{\"code\":\"CAHAL\",\"name\":\"Halifax\",\"country\":\"CA\",\"region\":\"NA\"},{\"code\":\"DEHAM\",\"name\":\"Hamburg\",\"country\":\"DE\",\"region\":\"EU\"},{\"code\":\"USNYC\",\"name\":\"New York\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"BRPEC\",\"name\":\"Pecem\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"NLRTM\",\"name\":\"Rotterdam\",\"country\":\"NL\",\"region\":\"EU\"},{\"code\":\"BRSSZ\",\"name\":\"Santos\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"USSAV\",\"name\":\"Savannah\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"CNSHA\",\"name\":\"Shanghai\",\"country\":\"CN\",\"region\":\"ASIA\"},{\"code\":\"SGSIN\",\"name\":\"Singapore\",\"country\":\"SG\",\"region\":\"ASIA\"},{\"code\":\"ESVLC\",\"name\":\"Valencia\",\"country\":\"ES\",\"region\":\"EU\"}]}"
+      }
+    },
+    {
+      "name": "repeated region (Express makes it an array)",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?region=EU&region=AS",
+        "headers": {}
+      },
+      "outcome": "same",
+      "differences": [],
+      "legacy": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":0,\"ports\":[]}"
+      },
+      "service": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":0,\"ports\":[]}"
+      }
+    }
+  ]
+}

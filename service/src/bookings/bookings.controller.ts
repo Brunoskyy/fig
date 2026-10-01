@@ -34,7 +34,8 @@ export class BookingsController {
         customer: row.customer_id,
         status: row.status,
         created: row.created_at,
-        cancelled: row.cancelled_at ?? null,
+        // `||`, not `??`: legacy turns an empty string into null too.
+        cancelled: row.cancelled_at || null,
         fee: row.fee ?? null,
       },
     }
