@@ -22,7 +22,9 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "approve": "node scripts/approve.mjs",
+    "hooks:dry-run": "node scripts/hooks-dry-run.mjs"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.0",

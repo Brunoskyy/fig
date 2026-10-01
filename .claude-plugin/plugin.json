@@ -1,0 +1,8 @@
+{
+  "name": "fig",
+  "version": "0.1.0",
+  "description": "Fig, a refactor toolkit for legacy backends",
+  "author": { "name": "Artur Bruno", "email": "arturbrunoferreira@gmail.com" },
+  "license": "MIT",
+  "keywords": ["strangler-fig", "migration", "legacy", "parity", "characterization-tests"]
+}
