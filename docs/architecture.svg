@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 430" width="880" height="430" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif" font-size="13" role="img" aria-label="Fig architecture">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#6b6f80"/></marker>
+    <style>
+      .box { fill: #ffffff; stroke: #cfd2dc; stroke-width: 1.2 }
+      .old { fill: #fbf1e3; stroke: #e2c79b }
+      .new { fill: #ece5f7; stroke: #b9a2e0 }
+      .tool { fill: #e7f3ea; stroke: #a9d2b4 }
+      .t { fill: #1d2230; font-weight: 600 }
+      .s { fill: #5d6272; font-size: 11.5px }
+      .l { stroke: #6b6f80; stroke-width: 1.4; fill: none; marker-end: url(#a) }
+      .d { stroke-dasharray: 4 4 }
+      .lab { fill: #6b6f80; font-size: 11px }
+    </style>
+  </defs>
+  <rect width="880" height="430" fill="#fbfaf7"/>
+
+  <rect class="box" x="20" y="150" width="110" height="60" rx="8"/>
+  <text class="t" x="40" y="176">callers</text>
+  <text class="s" x="40" y="194">portal, app, partners</text>
+
+  <rect class="box" x="190" y="135" width="170" height="90" rx="8"/>
+  <text class="t" x="206" y="160">edge/</text>
+  <text class="s" x="206" y="178">strangler proxy, node:http</text>
+  <text class="s" x="206" y="195">routes.yaml: legacy | service</text>
+  <text class="s" x="206" y="211">| shadow (GET only)</text>
+
+  <rect class="box old" x="440" y="40" width="190" height="80" rx="8"/>
+  <text class="t" x="456" y="65">legacy/  Quayside 1.9.3</text>
+  <text class="s" x="456" y="83">Express callbacks, raw SQL</text>
+  <text class="s" x="456" y="100">read-only for the agent</text>
+
+  <rect class="box new" x="440" y="240" width="190" height="80" rx="8"/>
+  <text class="t" x="456" y="265">service/  NestJS</text>
+  <text class="s" x="456" y="283">modules, validation, filters</text>
+  <text class="s" x="456" y="300">JSON logs with request ids</text>
+
+  <rect class="box" x="700" y="140" width="150" height="80" rx="8"/>
+  <text class="t" x="716" y="166">SQLite</text>
+  <text class="s" x="716" y="184">one database, shared</text>
+  <text class="s" x="716" y="200">during the migration</text>
+
+  <path class="l" d="M130 180 H188"/>
+  <path class="l" d="M360 165 C400 150 405 90 438 85"/>
+  <path class="l" d="M360 195 C400 210 405 275 438 280"/>
+  <text class="lab" x="380" y="118">legacy, shadow</text>
+  <text class="lab" x="380" y="250">service, shadow</text>
+  <path class="l" d="M630 80 C670 90 680 150 698 165"/>
+  <path class="l" d="M630 280 C670 270 680 210 698 200"/>
+
+  <rect class="box tool" x="190" y="350" width="170" height="62" rx="8"/>
+  <text class="t" x="206" y="374">migration/shadow/</text>
+  <text class="s" x="206" y="392">diffs from real traffic</text>
+  <path class="l d" d="M275 225 V348"/>
+
+  <rect class="box tool" x="20" y="20" width="370" height="90" rx="8"/>
+  <text class="t" x="36" y="44">parity/</text>
+  <text class="s" x="36" y="62">record: corpus → legacy → golden/  (frozen clock, fresh DB)</text>
+  <text class="s" x="36" y="79">replay: golden/ → service → diff → migration/parity/</text>
+  <text class="s" x="36" y="96">index/: AST chunks of legacy, BM25 + bge-small, RRF</text>
+
+  <rect class="box tool" x="660" y="270" width="200" height="142" rx="8"/>
+  <text class="t" x="676" y="294">Claude Code plugin</text>
+  <text class="s" x="676" y="312">/fig:survey  /fig:plan  /fig:port</text>
+  <text class="s" x="676" y="329">/fig:parity  /fig:flip</text>
+  <text class="s" x="676" y="346">agent: rule-auditor</text>
+  <text class="s" x="676" y="366">hooks: guard legacy/, guard flips,</text>
+  <text class="s" x="676" y="382">guard approvals, journal every call</text>
+  <text class="s" x="676" y="400">→ migration/journal.md</text>
+</svg>
