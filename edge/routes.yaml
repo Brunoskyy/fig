@@ -6,4 +6,13 @@ upstreams:
   service: http://127.0.0.1:4200
 timeoutMs: 5000
 default: legacy
-routes: []
+routes:
+  - match: 'GET /api/v1/ports'
+    to: service
+    note: parity 8/8 on 2026-10-01
+  - match: 'POST /api/v1/quote'
+    to: service
+    note: parity 33/33 on 2026-10-01
+  - match: 'GET /api/v1/bookings/:id'
+    to: shadow
+    note: parity 4 same + 2 accepted (Q9) on 2026-10-01; shadow until the mobile app reads the status code

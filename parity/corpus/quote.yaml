@@ -1,6 +1,10 @@
 # POST /api/v1/quote: every pricing rule in QUIRKS.md, plus the validation
 # order. The clock is frozen at 2016-11-20T10:00:00Z for both sides.
 match: POST /api/v1/quote
+# No seeded lane is cheap enough to reach the $95 hazardous minimum (Q4),
+# so the corpus adds one. Both sides get the same row.
+setup: |
+  INSERT INTO lanes VALUES ('CAHAL', 'USNYC', '20DV', 41000);
 cases:
   - name: plain 20DV quote
     body: { from: NLRTM, to: USNYC, container: 20DV, depart: '2016-11-29' }
@@ -20,6 +24,8 @@ cases:
     body: { from: DEHAM, to: USSAV, container: 20DV, weight: 28500, depart: '2016-11-29' }
   - name: hazardous surcharge is 18% of base (Q4)
     body: { from: BRPEC, to: ESVLC, container: 20DV, hazardous: Y, depart: '2016-11-29' }
+  - name: hazardous minimum of $95 on a cheap lane (Q4)
+    body: { from: CAHAL, to: USNYC, container: 20DV, hazardous: y, depart: '2016-11-29' }
   - name: hazardous for a gold customer is not discounted (Q4)
     body: { from: NLRTM, to: USNYC, container: 40HC, hazardous: 'true', customer: 2, depart: '2016-11-29' }
   - name: weekend departure

@@ -1,9 +1,9 @@
 {
   "route": "quote",
   "match": "POST /api/v1/quote",
-  "recordedAt": "2026-10-01T11:12:33.315Z",
+  "recordedAt": "2026-10-01T11:21:31.877Z",
   "clock": "2016-11-20T10:00:00Z",
-  "corpusHash": "6bb1ac419632a21f",
+  "corpusHash": "85c5e683a2261a23",
   "cases": [
     {
       "name": "plain 20DV quote",
@@ -168,6 +168,24 @@
       }
     },
     {
+      "name": "hazardous minimum of $95 on a cheap lane (Q4)",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/quote",
+        "headers": {
+          "content-type": "application/json"
+        },
+        "body": "{\"from\":\"CAHAL\",\"to\":\"USNYC\",\"container\":\"20DV\",\"hazardous\":\"y\",\"depart\":\"2016-11-29\"}"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"quote\":{\"id\":9,\"customer\":null,\"from\":\"CAHAL\",\"to\":\"USNYC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":true,\"depart\":\"2016-11-29\",\"total\":541.5,\"currency\":\"USD\",\"breakdown\":{\"base\":\"410.00\",\"weight\":\"0.00\",\"hazardous\":\"95.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"36.49\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+      }
+    },
+    {
       "name": "hazardous for a gold customer is not discounted (Q4)",
       "request": {
         "method": "POST",
@@ -182,7 +200,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":9,\"customer\":2,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"40HC\",\"weight\":null,\"hazardous\":true,\"depart\":\"2016-11-29\",\"total\":3387.5,\"currency\":\"USD\",\"breakdown\":{\"base\":\"2840.00\",\"weight\":\"0.00\",\"hazardous\":\"511.20\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"252.76\",\"discount\":\"216.49\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":10,\"customer\":2,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"40HC\",\"weight\":null,\"hazardous\":true,\"depart\":\"2016-11-29\",\"total\":3387.5,\"currency\":\"USD\",\"breakdown\":{\"base\":\"2840.00\",\"weight\":\"0.00\",\"hazardous\":\"511.20\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"252.76\",\"discount\":\"216.49\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -200,7 +218,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":10,\"customer\":null,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-11-26\",\"total\":2057,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1820.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"75.00\",\"peak\":\"0.00\",\"fuel\":\"161.98\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":11,\"customer\":null,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-11-26\",\"total\":2057,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1820.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"75.00\",\"peak\":\"0.00\",\"fuel\":\"161.98\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -218,7 +236,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":11,\"customer\":null,\"from\":\"CNSHA\",\"to\":\"DEHAM\",\"container\":\"40HC\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-12-01\",\"total\":4718.6,\"currency\":\"USD\",\"breakdown\":{\"base\":\"3890.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"466.80\",\"fuel\":\"361.77\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":12,\"customer\":null,\"from\":\"CNSHA\",\"to\":\"DEHAM\",\"container\":\"40HC\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-12-01\",\"total\":4718.6,\"currency\":\"USD\",\"breakdown\":{\"base\":\"3890.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"466.80\",\"fuel\":\"361.77\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -236,7 +254,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":12,\"customer\":null,\"from\":\"CNSHA\",\"to\":\"DEHAM\",\"container\":\"40HC\",\"weight\":null,\"hazardous\":false,\"depart\":\"2017-01-14\",\"total\":4813.05,\"currency\":\"USD\",\"breakdown\":{\"base\":\"3890.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"75.00\",\"peak\":\"466.80\",\"fuel\":\"381.22\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":13,\"customer\":null,\"from\":\"CNSHA\",\"to\":\"DEHAM\",\"container\":\"40HC\",\"weight\":null,\"hazardous\":false,\"depart\":\"2017-01-14\",\"total\":4813.05,\"currency\":\"USD\",\"breakdown\":{\"base\":\"3890.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"75.00\",\"peak\":\"466.80\",\"fuel\":\"381.22\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -254,7 +272,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":13,\"customer\":null,\"from\":\"CNSHA\",\"to\":\"DEHAM\",\"container\":\"40HC\",\"weight\":null,\"hazardous\":false,\"depart\":\"2017-01-15\",\"total\":4346.25,\"currency\":\"USD\",\"breakdown\":{\"base\":\"3890.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"75.00\",\"peak\":\"0.00\",\"fuel\":\"381.22\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":14,\"customer\":null,\"from\":\"CNSHA\",\"to\":\"DEHAM\",\"container\":\"40HC\",\"weight\":null,\"hazardous\":false,\"depart\":\"2017-01-15\",\"total\":4346.25,\"currency\":\"USD\",\"breakdown\":{\"base\":\"3890.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"75.00\",\"peak\":\"0.00\",\"fuel\":\"381.22\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -272,7 +290,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":14,\"customer\":2,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"40HC\",\"weight\":21500,\"hazardous\":true,\"depart\":\"2016-12-03\",\"total\":4097.25,\"currency\":\"USD\",\"breakdown\":{\"base\":\"2840.00\",\"weight\":\"300.00\",\"hazardous\":\"511.20\",\"weekend\":\"75.00\",\"peak\":\"376.80\",\"fuel\":\"264.12\",\"discount\":\"269.91\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":15,\"customer\":2,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"40HC\",\"weight\":21500,\"hazardous\":true,\"depart\":\"2016-12-03\",\"total\":4097.25,\"currency\":\"USD\",\"breakdown\":{\"base\":\"2840.00\",\"weight\":\"300.00\",\"hazardous\":\"511.20\",\"weekend\":\"75.00\",\"peak\":\"376.80\",\"fuel\":\"264.12\",\"discount\":\"269.91\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -290,7 +308,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":15,\"customer\":null,\"from\":\"USNYC\",\"to\":\"NLRTM\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2017-02-10\",\"total\":2098.3,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1911.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"187.28\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":16,\"customer\":null,\"from\":\"USNYC\",\"to\":\"NLRTM\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2017-02-10\",\"total\":2098.3,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1911.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"187.28\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -308,7 +326,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":16,\"customer\":null,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2015-06-01\",\"total\":1820,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1820.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"0.00\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":17,\"customer\":null,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2015-06-01\",\"total\":1820,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1820.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"0.00\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -326,7 +344,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":17,\"customer\":null,\"from\":\"BRPEC\",\"to\":\"ESVLC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":true,\"depart\":\"2016-11-29\",\"total\":2239.8,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1765.00\",\"weight\":\"0.00\",\"hazardous\":\"317.70\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"157.08\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":18,\"customer\":null,\"from\":\"BRPEC\",\"to\":\"ESVLC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":true,\"depart\":\"2016-11-29\",\"total\":2239.8,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1765.00\",\"weight\":\"0.00\",\"hazardous\":\"317.70\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"157.08\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -344,7 +362,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":18,\"customer\":null,\"from\":\"BRPEC\",\"to\":\"ESVLC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-11-29\",\"total\":1922.1,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1765.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"157.08\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":19,\"customer\":null,\"from\":\"BRPEC\",\"to\":\"ESVLC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-11-29\",\"total\":1922.1,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1765.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"157.08\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -362,7 +380,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":19,\"customer\":4,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-11-29\",\"total\":1843.25,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1820.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"161.98\",\"discount\":\"138.74\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":20,\"customer\":4,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-11-29\",\"total\":1843.25,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1820.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"161.98\",\"discount\":\"138.74\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -506,7 +524,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":20,\"customer\":null,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-03-01\",\"total\":1972.9,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1820.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"152.88\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":21,\"customer\":null,\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"20DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-03-01\",\"total\":1972.9,\"currency\":\"USD\",\"breakdown\":{\"base\":\"1820.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"152.88\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -560,7 +578,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":21,\"customer\":null,\"from\":\"BRSSZ\",\"to\":\"NLRTM\",\"container\":\"40DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-11-29\",\"total\":3463.05,\"currency\":\"USD\",\"breakdown\":{\"base\":\"3180.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"283.02\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":22,\"customer\":null,\"from\":\"BRSSZ\",\"to\":\"NLRTM\",\"container\":\"40DV\",\"weight\":null,\"hazardous\":false,\"depart\":\"2016-11-29\",\"total\":3463.05,\"currency\":\"USD\",\"breakdown\":{\"base\":\"3180.00\",\"weight\":\"0.00\",\"hazardous\":\"0.00\",\"weekend\":\"0.00\",\"peak\":\"0.00\",\"fuel\":\"283.02\",\"discount\":\"0.00\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     },
     {
@@ -578,7 +596,7 @@
         "headers": {
           "content-type": "application/json; charset=utf-8"
         },
-        "body": "{\"ok\":true,\"quote\":{\"id\":22,\"customer\":4,\"from\":\"NLRTM\",\"to\":\"BRSSZ\",\"container\":\"20RF\",\"weight\":23999,\"hazardous\":false,\"depart\":\"2016-12-24\",\"total\":5977.6,\"currency\":\"USD\",\"breakdown\":{\"base\":\"4683.00\",\"weight\":\"600.00\",\"hazardous\":\"0.00\",\"weekend\":\"75.00\",\"peak\":\"633.96\",\"fuel\":\"435.52\",\"discount\":\"449.92\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
+        "body": "{\"ok\":true,\"quote\":{\"id\":23,\"customer\":4,\"from\":\"NLRTM\",\"to\":\"BRSSZ\",\"container\":\"20RF\",\"weight\":23999,\"hazardous\":false,\"depart\":\"2016-12-24\",\"total\":5977.6,\"currency\":\"USD\",\"breakdown\":{\"base\":\"4683.00\",\"weight\":\"600.00\",\"hazardous\":\"0.00\",\"weekend\":\"75.00\",\"peak\":\"633.96\",\"fuel\":\"435.52\",\"discount\":\"449.92\"},\"created\":\"2016-11-20 10:00:00\",\"expires\":\"2016-11-27\"}}"
       }
     }
   ]
