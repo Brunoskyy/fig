@@ -19,5 +19,3 @@ The golden route: the first one ported, chosen because it has almost no rules. `
 Module service/src/ports/. Mode after porting: service.
 
 ## Approval
-
-Approved-by: Artur Bruno on 2026-10-01
