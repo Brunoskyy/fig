@@ -1,0 +1,1727 @@
+{
+  "date": "2026-10-01",
+  "model": "Xenova/bge-small-en-v1.5",
+  "rrfK": 60,
+  "chunks": 49,
+  "questions": 44,
+  "results": [
+    {
+      "mode": "keyword",
+      "all": {
+        "n": 44,
+        "recallAt5": 0.523,
+        "mrr": 0.439,
+        "hitAt1": 0.364
+      },
+      "plain": {
+        "n": 32,
+        "recallAt5": 0.344,
+        "mrr": 0.276,
+        "hitAt1": 0.219
+      },
+      "code": {
+        "n": 12,
+        "recallAt5": 1,
+        "mrr": 0.875,
+        "hitAt1": 0.75
+      },
+      "questions": [
+        {
+          "id": "reverse-lane",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 0.5,
+          "top": [
+            "legacy/app.js:114-116",
+            "legacy/app.js:405-432"
+          ]
+        },
+        {
+          "id": "heavy-box",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:130-137",
+            "legacy/app.js:114-116"
+          ]
+        },
+        {
+          "id": "dangerous-minimum",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:217-227",
+            "legacy/db/schema.sql:39-47"
+          ]
+        },
+        {
+          "id": "saturday-sailing",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:114-116",
+            "legacy/app.js:405-432"
+          ]
+        },
+        {
+          "id": "high-season",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:139-146",
+            "legacy/app.js:392-403"
+          ]
+        },
+        {
+          "id": "missing-bunker-month",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:130-137",
+            "legacy/app.js:445-454",
+            "legacy/app.js:438-443",
+            "legacy/db/schema.sql:15-18",
+            "legacy/app.js:405-432"
+          ]
+        },
+        {
+          "id": "loyalty-and-dangerous",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:217-227",
+            "legacy/app.js:405-432",
+            "legacy/db/schema.sql:39-47"
+          ]
+        },
+        {
+          "id": "rounding",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:153-193"
+          ]
+        },
+        {
+          "id": "box-types",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:335-343",
+            "legacy/app.js:114-116",
+            "legacy/app.js:130-137"
+          ]
+        },
+        {
+          "id": "health-check",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/server.js:8-8",
+            "legacy/server.js:11-11",
+            "legacy/server.js:3-3",
+            "legacy/server.js:6-6",
+            "legacy/app.js:456-461"
+          ]
+        },
+        {
+          "id": "harbours-by-area",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:114-116",
+            "legacy/db/seed.sql:31-36",
+            "legacy/app.js:130-137"
+          ]
+        },
+        {
+          "id": "cross-domain",
+          "set": "plain",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:392-403",
+            "legacy/app.js:253-271",
+            "legacy/app.js:18-22"
+          ]
+        },
+        {
+          "id": "validation-order",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:75-79",
+            "legacy/app.js:335-343",
+            "legacy/server.js:8-8",
+            "legacy/app.js:102-104",
+            "legacy/app.js:438-443"
+          ]
+        },
+        {
+          "id": "weight-with-unit",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:445-454",
+            "legacy/app.js:253-271",
+            "legacy/app.js:28-69"
+          ]
+        },
+        {
+          "id": "limit-before-account",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:130-137",
+            "legacy/app.js:238-238",
+            "legacy/app.js:114-116",
+            "legacy/app.js:382-390",
+            "legacy/app.js:335-343"
+          ]
+        },
+        {
+          "id": "offer-validity",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:75-79",
+            "legacy/app.js:139-146",
+            "legacy/app.js:102-104",
+            "legacy/app.js:93-100",
+            "legacy/app.js:405-432"
+          ]
+        },
+        {
+          "id": "plain-text-api",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:245-247",
+            "legacy/db/schema.sql:25-38",
+            "legacy/db/schema.sql:1-7",
+            "legacy/db/schema.sql:19-24",
+            "legacy/db/schema.sql:8-14"
+          ]
+        },
+        {
+          "id": "stale-offer",
+          "set": "plain",
+          "firstHit": 4,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:277-325",
+            "legacy/app.js:114-116",
+            "legacy/app.js:335-343",
+            "legacy/app.js:357-380",
+            "legacy/app.js:28-69"
+          ]
+        },
+        {
+          "id": "double-reservation",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:335-343"
+          ]
+        },
+        {
+          "id": "unknown-reservation",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:114-116",
+            "legacy/db/schema.sql:39-47",
+            "legacy/app.js:335-343",
+            "legacy/db/schema.sql:8-14",
+            "legacy/db/schema.sql:15-18"
+          ]
+        },
+        {
+          "id": "history-pages",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:392-403",
+            "legacy/app.js:139-146",
+            "legacy/app.js:18-22",
+            "legacy/app.js:445-454",
+            "legacy/app.js:28-69"
+          ]
+        },
+        {
+          "id": "late-cancel-fee",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:114-116",
+            "legacy/app.js:139-146",
+            "legacy/app.js:102-104",
+            "legacy/app.js:93-100"
+          ]
+        },
+        {
+          "id": "after-sailing",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": []
+        },
+        {
+          "id": "update-bunker",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:130-137"
+          ]
+        },
+        {
+          "id": "unparseable-body",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:327-333",
+            "legacy/app.js:357-380",
+            "legacy/app.js:253-271",
+            "legacy/app.js:445-454",
+            "legacy/app.js:345-351"
+          ]
+        },
+        {
+          "id": "body-size",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:327-333",
+            "legacy/app.js:456-461",
+            "legacy/app.js:445-454",
+            "legacy/app.js:357-380"
+          ]
+        },
+        {
+          "id": "pin-clock",
+          "set": "plain",
+          "firstHit": 4,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:110-112",
+            "legacy/app.js:93-100",
+            "legacy/app.js:75-79",
+            "legacy/app.js:153-193"
+          ]
+        },
+        {
+          "id": "offer-columns",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/db/schema.sql:1-7",
+            "legacy/app.js:153-193",
+            "legacy/app.js:277-325"
+          ]
+        },
+        {
+          "id": "premium-accounts",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/db/schema.sql:19-24",
+            "legacy/app.js:153-193"
+          ]
+        },
+        {
+          "id": "base-rates",
+          "set": "plain",
+          "firstHit": 2,
+          "recall": 0.5,
+          "top": [
+            "legacy/app.js:118-128",
+            "legacy/db/schema.sql:8-14",
+            "legacy/app.js:153-193",
+            "legacy/app.js:139-146",
+            "legacy/app.js:18-22"
+          ]
+        },
+        {
+          "id": "flag-spellings",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:195-197",
+            "legacy/app.js:277-325"
+          ]
+        },
+        {
+          "id": "db-location",
+          "set": "plain",
+          "firstHit": 3,
+          "recall": 1,
+          "top": [
+            "legacy/server.js:3-3",
+            "legacy/server.js:8-8",
+            "legacy/server.js:6-6",
+            "legacy/server.js:11-11",
+            "legacy/app.js:466-471"
+          ]
+        },
+        {
+          "id": "code-overweight",
+          "set": "code",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:382-390",
+            "legacy/app.js:277-325"
+          ]
+        },
+        {
+          "id": "code-no-lane",
+          "set": "code",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:456-461",
+            "legacy/app.js:277-325",
+            "legacy/app.js:118-128",
+            "legacy/app.js:114-116",
+            "legacy/app.js:153-193"
+          ]
+        },
+        {
+          "id": "code-reverse-factor",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:114-116",
+            "legacy/app.js:153-193",
+            "legacy/app.js:118-128",
+            "legacy/app.js:277-325"
+          ]
+        },
+        {
+          "id": "code-already-cancelled",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:217-227",
+            "legacy/app.js:357-380",
+            "legacy/db/schema.sql:39-47"
+          ]
+        },
+        {
+          "id": "code-powered-by",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:233-237"
+          ]
+        },
+        {
+          "id": "code-parse-failed",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:456-461",
+            "legacy/app.js:93-100",
+            "legacy/app.js:392-403",
+            "legacy/app.js:345-351",
+            "legacy/app.js:405-432"
+          ]
+        },
+        {
+          "id": "code-page-size",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:392-403",
+            "legacy/app.js:18-22"
+          ]
+        },
+        {
+          "id": "code-fuel-table",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/db/schema.sql:15-18",
+            "legacy/app.js:130-137",
+            "legacy/app.js:445-454",
+            "legacy/db/schema.sql:1-7",
+            "legacy/app.js:438-443"
+          ]
+        },
+        {
+          "id": "code-insert-or-replace",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:445-454",
+            "legacy/db/seed.sql:25-29",
+            "legacy/db/seed.sql:31-36",
+            "legacy/db/seed.sql:1-13",
+            "legacy/app.js:438-443"
+          ]
+        },
+        {
+          "id": "code-callback-regex",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:253-271",
+            "legacy/app.js:392-403"
+          ]
+        },
+        {
+          "id": "code-base-cents",
+          "set": "code",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:118-128",
+            "legacy/app.js:153-193",
+            "legacy/db/schema.sql:8-14"
+          ]
+        },
+        {
+          "id": "code-quayside-db",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/server.js:6-6",
+            "legacy/app.js:75-79",
+            "legacy/app.js:240-243",
+            "legacy/server.js:11-11",
+            "legacy/db/schema.sql:1-7"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "vector",
+      "all": {
+        "n": 44,
+        "recallAt5": 0.716,
+        "mrr": 0.627,
+        "hitAt1": 0.545
+      },
+      "plain": {
+        "n": 32,
+        "recallAt5": 0.703,
+        "mrr": 0.628,
+        "hitAt1": 0.563
+      },
+      "code": {
+        "n": 12,
+        "recallAt5": 0.75,
+        "mrr": 0.625,
+        "hitAt1": 0.5
+      },
+      "questions": [
+        {
+          "id": "reverse-lane",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:114-116",
+            "legacy/app.js:153-193",
+            "legacy/app.js:405-432",
+            "legacy/app.js:382-390",
+            "legacy/app.js:118-128"
+          ]
+        },
+        {
+          "id": "heavy-box",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:153-193",
+            "legacy/app.js:18-22",
+            "legacy/app.js:238-238",
+            "legacy/app.js:114-116",
+            "legacy/app.js:335-343"
+          ]
+        },
+        {
+          "id": "dangerous-minimum",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:153-193",
+            "legacy/app.js:405-432",
+            "legacy/app.js:114-116",
+            "legacy/app.js:357-380",
+            "legacy/app.js:130-137"
+          ]
+        },
+        {
+          "id": "saturday-sailing",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:148-151",
+            "legacy/app.js:405-432",
+            "legacy/app.js:153-193",
+            "legacy/app.js:139-146",
+            "legacy/app.js:102-104"
+          ]
+        },
+        {
+          "id": "high-season",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:139-146",
+            "legacy/app.js:148-151",
+            "legacy/app.js:130-137",
+            "legacy/app.js:75-79",
+            "legacy/db/schema.sql:15-18"
+          ]
+        },
+        {
+          "id": "missing-bunker-month",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:130-137",
+            "legacy/app.js:445-454",
+            "legacy/app.js:405-432",
+            "legacy/app.js:438-443",
+            "legacy/app.js:153-193"
+          ]
+        },
+        {
+          "id": "loyalty-and-dangerous",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:153-193",
+            "legacy/app.js:405-432",
+            "legacy/app.js:114-116",
+            "legacy/app.js:130-137",
+            "legacy/app.js:139-146"
+          ]
+        },
+        {
+          "id": "rounding",
+          "set": "plain",
+          "firstHit": 3,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:110-112",
+            "legacy/app.js:118-128",
+            "legacy/app.js:153-193",
+            "legacy/app.js:277-325",
+            "legacy/app.js:114-116"
+          ]
+        },
+        {
+          "id": "box-types",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:18-22",
+            "legacy/app.js:153-193",
+            "legacy/app.js:118-128",
+            "legacy/app.js:110-112",
+            "legacy/db/schema.sql:8-14"
+          ]
+        },
+        {
+          "id": "health-check",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/server.js:8-8",
+            "legacy/server.js:11-11",
+            "legacy/app.js:75-79",
+            "legacy/app.js:382-390",
+            "legacy/server.js:3-3"
+          ]
+        },
+        {
+          "id": "harbours-by-area",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:253-271",
+            "legacy/db/schema.sql:1-7",
+            "legacy/app.js:118-128",
+            "legacy/db/seed.sql:1-13",
+            "legacy/server.js:6-6"
+          ]
+        },
+        {
+          "id": "cross-domain",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:253-271",
+            "legacy/server.js:6-6",
+            "legacy/app.js:240-243",
+            "legacy/app.js:245-247",
+            "legacy/app.js:392-403"
+          ]
+        },
+        {
+          "id": "validation-order",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:153-193",
+            "legacy/app.js:357-380",
+            "legacy/app.js:114-116",
+            "legacy/app.js:392-403"
+          ]
+        },
+        {
+          "id": "weight-with-unit",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:89-91",
+            "legacy/app.js:85-87",
+            "legacy/app.js:110-112",
+            "legacy/app.js:130-137",
+            "legacy/app.js:81-83"
+          ]
+        },
+        {
+          "id": "limit-before-account",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:238-238",
+            "legacy/app.js:405-432",
+            "legacy/app.js:392-403",
+            "legacy/app.js:130-137",
+            "legacy/app.js:382-390"
+          ]
+        },
+        {
+          "id": "offer-validity",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:153-193",
+            "legacy/app.js:139-146",
+            "legacy/app.js:357-380",
+            "legacy/app.js:148-151"
+          ]
+        },
+        {
+          "id": "plain-text-api",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:253-271",
+            "legacy/app.js:357-380",
+            "legacy/app.js:199-215",
+            "legacy/app.js:327-333",
+            "legacy/app.js:277-325"
+          ]
+        },
+        {
+          "id": "stale-offer",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:217-227",
+            "legacy/app.js:392-403",
+            "legacy/app.js:130-137",
+            "legacy/db/seed.sql:31-36"
+          ]
+        },
+        {
+          "id": "double-reservation",
+          "set": "plain",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:357-380",
+            "legacy/app.js:217-227",
+            "legacy/app.js:110-112",
+            "legacy/app.js:382-390"
+          ]
+        },
+        {
+          "id": "unknown-reservation",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:382-390",
+            "legacy/app.js:392-403",
+            "legacy/app.js:357-380",
+            "legacy/app.js:405-432",
+            "legacy/app.js:217-227"
+          ]
+        },
+        {
+          "id": "history-pages",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 0.5,
+          "top": [
+            "legacy/app.js:392-403",
+            "legacy/app.js:382-390",
+            "legacy/app.js:405-432",
+            "legacy/db/schema.sql:39-47",
+            "legacy/app.js:357-380"
+          ]
+        },
+        {
+          "id": "late-cancel-fee",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:153-193",
+            "legacy/app.js:217-227",
+            "legacy/app.js:357-380",
+            "legacy/app.js:392-403"
+          ]
+        },
+        {
+          "id": "after-sailing",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:75-79",
+            "legacy/app.js:217-227",
+            "legacy/app.js:382-390",
+            "legacy/app.js:357-380"
+          ]
+        },
+        {
+          "id": "update-bunker",
+          "set": "plain",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:130-137",
+            "legacy/app.js:445-454",
+            "legacy/app.js:438-443",
+            "legacy/db/seed.sql:25-29",
+            "legacy/db/schema.sql:15-18"
+          ]
+        },
+        {
+          "id": "unparseable-body",
+          "set": "plain",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:327-333",
+            "legacy/app.js:456-461",
+            "legacy/app.js:357-380",
+            "legacy/app.js:253-271",
+            "legacy/app.js:345-351"
+          ]
+        },
+        {
+          "id": "body-size",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:238-238",
+            "legacy/app.js:18-22",
+            "legacy/app.js:327-333",
+            "legacy/app.js:445-454",
+            "legacy/app.js:392-403"
+          ]
+        },
+        {
+          "id": "pin-clock",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:75-79",
+            "legacy/app.js:93-100",
+            "legacy/app.js:139-146",
+            "legacy/app.js:102-104",
+            "legacy/app.js:195-197"
+          ]
+        },
+        {
+          "id": "offer-columns",
+          "set": "plain",
+          "firstHit": 4,
+          "recall": 1,
+          "top": [
+            "legacy/db/seed.sql:31-36",
+            "legacy/db/seed.sql:25-29",
+            "legacy/app.js:153-193",
+            "legacy/db/schema.sql:25-38",
+            "legacy/app.js:217-227"
+          ]
+        },
+        {
+          "id": "premium-accounts",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:139-146",
+            "legacy/app.js:153-193",
+            "legacy/app.js:335-343",
+            "legacy/app.js:392-403",
+            "legacy/app.js:438-443"
+          ]
+        },
+        {
+          "id": "base-rates",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:153-193",
+            "legacy/app.js:114-116",
+            "legacy/app.js:253-271",
+            "legacy/app.js:18-22"
+          ]
+        },
+        {
+          "id": "flag-spellings",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:195-197",
+            "legacy/app.js:240-243",
+            "legacy/db/seed.sql:1-13",
+            "legacy/app.js:89-91",
+            "legacy/app.js:445-454"
+          ]
+        },
+        {
+          "id": "db-location",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/server.js:6-6",
+            "legacy/app.js:253-271",
+            "legacy/server.js:3-3",
+            "legacy/server.js:11-11",
+            "legacy/db/schema.sql:1-7"
+          ]
+        },
+        {
+          "id": "code-overweight",
+          "set": "code",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:114-116",
+            "legacy/app.js:153-193",
+            "legacy/app.js:445-454",
+            "legacy/app.js:382-390",
+            "legacy/app.js:130-137"
+          ]
+        },
+        {
+          "id": "code-no-lane",
+          "set": "code",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:118-128",
+            "legacy/app.js:114-116",
+            "legacy/db/seed.sql:15-23",
+            "legacy/db/schema.sql:8-14",
+            "legacy/app.js:456-461"
+          ]
+        },
+        {
+          "id": "code-reverse-factor",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:114-116",
+            "legacy/app.js:118-128",
+            "legacy/db/seed.sql:15-23",
+            "legacy/db/schema.sql:8-14",
+            "legacy/app.js:153-193"
+          ]
+        },
+        {
+          "id": "code-already-cancelled",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:357-380",
+            "legacy/app.js:93-100",
+            "legacy/app.js:75-79",
+            "legacy/app.js:382-390"
+          ]
+        },
+        {
+          "id": "code-powered-by",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:233-237",
+            "legacy/app.js:130-137",
+            "legacy/app.js:445-454",
+            "legacy/app.js:18-22",
+            "legacy/app.js:438-443"
+          ]
+        },
+        {
+          "id": "code-parse-failed",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:456-461",
+            "legacy/server.js:8-8",
+            "legacy/server.js:3-3",
+            "legacy/app.js:327-333",
+            "legacy/server.js:6-6"
+          ]
+        },
+        {
+          "id": "code-page-size",
+          "set": "code",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:18-22",
+            "legacy/app.js:392-403",
+            "legacy/app.js:405-432",
+            "legacy/app.js:114-116",
+            "legacy/app.js:238-238"
+          ]
+        },
+        {
+          "id": "code-fuel-table",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/db/schema.sql:15-18",
+            "legacy/app.js:130-137",
+            "legacy/app.js:445-454",
+            "legacy/app.js:438-443",
+            "legacy/db/seed.sql:25-29"
+          ]
+        },
+        {
+          "id": "code-insert-or-replace",
+          "set": "code",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/db/seed.sql:25-29",
+            "legacy/app.js:445-454",
+            "legacy/db/schema.sql:15-18",
+            "legacy/db/seed.sql:31-36",
+            "legacy/db/seed.sql:1-13"
+          ]
+        },
+        {
+          "id": "code-callback-regex",
+          "set": "code",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:357-380",
+            "legacy/app.js:277-325",
+            "legacy/app.js:345-351",
+            "legacy/app.js:327-333",
+            "legacy/app.js:199-215"
+          ]
+        },
+        {
+          "id": "code-base-cents",
+          "set": "code",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:110-112",
+            "legacy/app.js:153-193",
+            "legacy/db/schema.sql:8-14",
+            "legacy/app.js:118-128",
+            "legacy/app.js:114-116"
+          ]
+        },
+        {
+          "id": "code-quayside-db",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/server.js:6-6",
+            "legacy/app.js:240-243",
+            "legacy/db/schema.sql:1-7",
+            "legacy/server.js:11-11",
+            "legacy/db/seed.sql:1-13"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "hybrid",
+      "all": {
+        "n": 44,
+        "recallAt5": 0.773,
+        "mrr": 0.558,
+        "hitAt1": 0.432
+      },
+      "plain": {
+        "n": 32,
+        "recallAt5": 0.719,
+        "mrr": 0.454,
+        "hitAt1": 0.313
+      },
+      "code": {
+        "n": 12,
+        "recallAt5": 0.917,
+        "mrr": 0.833,
+        "hitAt1": 0.75
+      },
+      "questions": [
+        {
+          "id": "reverse-lane",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:114-116",
+            "legacy/app.js:405-432",
+            "legacy/app.js:153-193",
+            "legacy/app.js:382-390",
+            "legacy/app.js:118-128"
+          ]
+        },
+        {
+          "id": "heavy-box",
+          "set": "plain",
+          "firstHit": 4,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:114-116",
+            "legacy/app.js:130-137",
+            "legacy/app.js:153-193",
+            "legacy/app.js:18-22"
+          ]
+        },
+        {
+          "id": "dangerous-minimum",
+          "set": "plain",
+          "firstHit": 4,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:217-227",
+            "legacy/db/schema.sql:39-47",
+            "legacy/app.js:153-193",
+            "legacy/app.js:114-116"
+          ]
+        },
+        {
+          "id": "saturday-sailing",
+          "set": "plain",
+          "firstHit": 3,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:114-116",
+            "legacy/app.js:148-151",
+            "legacy/app.js:153-193",
+            "legacy/app.js:139-146"
+          ]
+        },
+        {
+          "id": "high-season",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:139-146",
+            "legacy/app.js:148-151",
+            "legacy/app.js:392-403",
+            "legacy/app.js:130-137",
+            "legacy/app.js:75-79"
+          ]
+        },
+        {
+          "id": "missing-bunker-month",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:130-137",
+            "legacy/app.js:445-454",
+            "legacy/app.js:438-443",
+            "legacy/app.js:405-432",
+            "legacy/db/schema.sql:15-18"
+          ]
+        },
+        {
+          "id": "loyalty-and-dangerous",
+          "set": "plain",
+          "firstHit": 3,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:217-227",
+            "legacy/app.js:153-193",
+            "legacy/app.js:114-116",
+            "legacy/db/schema.sql:39-47"
+          ]
+        },
+        {
+          "id": "rounding",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:153-193",
+            "legacy/app.js:110-112",
+            "legacy/app.js:118-128",
+            "legacy/app.js:277-325",
+            "legacy/app.js:114-116"
+          ]
+        },
+        {
+          "id": "box-types",
+          "set": "plain",
+          "firstHit": 4,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:335-343",
+            "legacy/app.js:114-116",
+            "legacy/app.js:130-137",
+            "legacy/app.js:18-22",
+            "legacy/app.js:153-193"
+          ]
+        },
+        {
+          "id": "health-check",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/server.js:8-8",
+            "legacy/server.js:11-11",
+            "legacy/server.js:3-3",
+            "legacy/app.js:456-461",
+            "legacy/server.js:6-6"
+          ]
+        },
+        {
+          "id": "harbours-by-area",
+          "set": "plain",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:114-116",
+            "legacy/app.js:253-271",
+            "legacy/db/schema.sql:1-7",
+            "legacy/db/seed.sql:31-36",
+            "legacy/app.js:118-128"
+          ]
+        },
+        {
+          "id": "cross-domain",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:253-271",
+            "legacy/app.js:392-403",
+            "legacy/app.js:18-22",
+            "legacy/server.js:6-6",
+            "legacy/app.js:240-243"
+          ]
+        },
+        {
+          "id": "validation-order",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:335-343",
+            "legacy/app.js:75-79",
+            "legacy/app.js:392-403",
+            "legacy/app.js:357-380",
+            "legacy/app.js:327-333"
+          ]
+        },
+        {
+          "id": "weight-with-unit",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:253-271",
+            "legacy/app.js:89-91",
+            "legacy/app.js:445-454",
+            "legacy/app.js:85-87",
+            "legacy/app.js:28-69"
+          ]
+        },
+        {
+          "id": "limit-before-account",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:238-238",
+            "legacy/app.js:130-137",
+            "legacy/app.js:382-390",
+            "legacy/app.js:392-403",
+            "legacy/app.js:335-343"
+          ]
+        },
+        {
+          "id": "offer-validity",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:139-146",
+            "legacy/app.js:405-432",
+            "legacy/app.js:153-193",
+            "legacy/app.js:102-104",
+            "legacy/app.js:75-79"
+          ]
+        },
+        {
+          "id": "plain-text-api",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:245-247",
+            "legacy/app.js:357-380",
+            "legacy/app.js:199-215",
+            "legacy/app.js:327-333",
+            "legacy/app.js:345-351"
+          ]
+        },
+        {
+          "id": "stale-offer",
+          "set": "plain",
+          "firstHit": 3,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:217-227",
+            "legacy/app.js:392-403",
+            "legacy/app.js:357-380",
+            "legacy/app.js:277-325",
+            "legacy/app.js:405-432"
+          ]
+        },
+        {
+          "id": "double-reservation",
+          "set": "plain",
+          "firstHit": 3,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:335-343",
+            "legacy/app.js:405-432",
+            "legacy/app.js:357-380",
+            "legacy/app.js:217-227",
+            "legacy/app.js:110-112"
+          ]
+        },
+        {
+          "id": "unknown-reservation",
+          "set": "plain",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/db/schema.sql:39-47",
+            "legacy/app.js:382-390",
+            "legacy/app.js:357-380",
+            "legacy/app.js:335-343",
+            "legacy/app.js:405-432"
+          ]
+        },
+        {
+          "id": "history-pages",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:392-403",
+            "legacy/app.js:139-146",
+            "legacy/app.js:18-22",
+            "legacy/app.js:382-390",
+            "legacy/app.js:405-432"
+          ]
+        },
+        {
+          "id": "late-cancel-fee",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:114-116",
+            "legacy/app.js:139-146",
+            "legacy/app.js:93-100",
+            "legacy/app.js:277-325"
+          ]
+        },
+        {
+          "id": "after-sailing",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:75-79",
+            "legacy/app.js:217-227",
+            "legacy/app.js:382-390",
+            "legacy/app.js:357-380"
+          ]
+        },
+        {
+          "id": "update-bunker",
+          "set": "plain",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:130-137",
+            "legacy/app.js:445-454",
+            "legacy/app.js:438-443",
+            "legacy/db/seed.sql:25-29",
+            "legacy/db/schema.sql:15-18"
+          ]
+        },
+        {
+          "id": "unparseable-body",
+          "set": "plain",
+          "firstHit": 4,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:327-333",
+            "legacy/app.js:357-380",
+            "legacy/app.js:253-271",
+            "legacy/app.js:456-461",
+            "legacy/app.js:345-351"
+          ]
+        },
+        {
+          "id": "body-size",
+          "set": "plain",
+          "firstHit": 5,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:327-333",
+            "legacy/app.js:445-454",
+            "legacy/app.js:357-380",
+            "legacy/app.js:456-461",
+            "legacy/app.js:238-238"
+          ]
+        },
+        {
+          "id": "pin-clock",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:75-79",
+            "legacy/app.js:93-100",
+            "legacy/app.js:110-112",
+            "legacy/app.js:405-432",
+            "legacy/app.js:102-104"
+          ]
+        },
+        {
+          "id": "offer-columns",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:153-193",
+            "legacy/db/schema.sql:1-7",
+            "legacy/db/seed.sql:31-36",
+            "legacy/db/seed.sql:25-29",
+            "legacy/app.js:277-325"
+          ]
+        },
+        {
+          "id": "premium-accounts",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:153-193",
+            "legacy/app.js:139-146",
+            "legacy/db/schema.sql:19-24",
+            "legacy/app.js:335-343",
+            "legacy/app.js:392-403"
+          ]
+        },
+        {
+          "id": "base-rates",
+          "set": "plain",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:153-193",
+            "legacy/app.js:18-22",
+            "legacy/app.js:392-403",
+            "legacy/app.js:118-128",
+            "legacy/app.js:139-146"
+          ]
+        },
+        {
+          "id": "flag-spellings",
+          "set": "plain",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:195-197",
+            "legacy/app.js:277-325",
+            "legacy/app.js:240-243",
+            "legacy/db/seed.sql:1-13",
+            "legacy/app.js:89-91"
+          ]
+        },
+        {
+          "id": "db-location",
+          "set": "plain",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/server.js:3-3",
+            "legacy/server.js:6-6",
+            "legacy/server.js:8-8",
+            "legacy/server.js:11-11",
+            "legacy/app.js:253-271"
+          ]
+        },
+        {
+          "id": "code-overweight",
+          "set": "code",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:382-390",
+            "legacy/app.js:277-325",
+            "legacy/app.js:114-116",
+            "legacy/app.js:153-193",
+            "legacy/app.js:445-454"
+          ]
+        },
+        {
+          "id": "code-no-lane",
+          "set": "code",
+          "firstHit": null,
+          "recall": 0,
+          "top": [
+            "legacy/app.js:118-128",
+            "legacy/app.js:456-461",
+            "legacy/app.js:114-116",
+            "legacy/app.js:357-380",
+            "legacy/app.js:153-193"
+          ]
+        },
+        {
+          "id": "code-reverse-factor",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:114-116",
+            "legacy/app.js:118-128",
+            "legacy/app.js:153-193",
+            "legacy/app.js:277-325",
+            "legacy/db/seed.sql:15-23"
+          ]
+        },
+        {
+          "id": "code-already-cancelled",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:405-432",
+            "legacy/app.js:357-380",
+            "legacy/app.js:217-227",
+            "legacy/db/schema.sql:39-47",
+            "legacy/app.js:93-100"
+          ]
+        },
+        {
+          "id": "code-powered-by",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:233-237",
+            "legacy/app.js:130-137",
+            "legacy/app.js:445-454",
+            "legacy/app.js:18-22",
+            "legacy/app.js:438-443"
+          ]
+        },
+        {
+          "id": "code-parse-failed",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:456-461",
+            "legacy/app.js:93-100",
+            "legacy/app.js:392-403",
+            "legacy/app.js:345-351",
+            "legacy/app.js:357-380"
+          ]
+        },
+        {
+          "id": "code-page-size",
+          "set": "code",
+          "firstHit": 2,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:18-22",
+            "legacy/app.js:392-403",
+            "legacy/app.js:405-432",
+            "legacy/app.js:114-116",
+            "legacy/app.js:238-238"
+          ]
+        },
+        {
+          "id": "code-fuel-table",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/db/schema.sql:15-18",
+            "legacy/app.js:130-137",
+            "legacy/app.js:445-454",
+            "legacy/app.js:438-443",
+            "legacy/db/schema.sql:1-7"
+          ]
+        },
+        {
+          "id": "code-insert-or-replace",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:445-454",
+            "legacy/db/seed.sql:25-29",
+            "legacy/db/seed.sql:31-36",
+            "legacy/db/seed.sql:1-13",
+            "legacy/db/schema.sql:15-18"
+          ]
+        },
+        {
+          "id": "code-callback-regex",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:253-271",
+            "legacy/app.js:392-403",
+            "legacy/app.js:357-380",
+            "legacy/app.js:277-325",
+            "legacy/app.js:345-351"
+          ]
+        },
+        {
+          "id": "code-base-cents",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/app.js:153-193",
+            "legacy/app.js:118-128",
+            "legacy/db/schema.sql:8-14",
+            "legacy/app.js:110-112",
+            "legacy/app.js:114-116"
+          ]
+        },
+        {
+          "id": "code-quayside-db",
+          "set": "code",
+          "firstHit": 1,
+          "recall": 1,
+          "top": [
+            "legacy/server.js:6-6",
+            "legacy/app.js:240-243",
+            "legacy/db/schema.sql:1-7",
+            "legacy/server.js:11-11",
+            "legacy/app.js:75-79"
+          ]
+        }
+      ]
+    }
+  ]
+}

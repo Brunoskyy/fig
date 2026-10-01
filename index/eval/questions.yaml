@@ -1,0 +1,188 @@
+# Questions a developer porting Quayside would ask, with the lines that
+# answer them. Written in the words of the business, not of the code: no
+# function names, no route paths, no phrases copied from comments. The
+# leakage test in test/index.test.ts enforces the first two.
+#
+# The `code` set is the other half of real use: questions from someone who
+# already saw a name in a log or a stack trace. Leakage is the point there,
+# so the test skips it, and the eval reports the two sets separately.
+#
+# A hit is a retrieved chunk in the same file that overlaps one of the
+# ranges. recall@5 is the share of a question's ranges covered in the top 5.
+questions:
+  - id: reverse-lane
+    set: plain
+    q: How much more is a return trip when the tariff lists just the outbound direction?
+    gold: [[legacy/app.js, 114, 116], [legacy/app.js, 118, 128]]
+  - id: heavy-box
+    set: plain
+    q: What extra do we charge when a box weighs more than twenty tonnes?
+    gold: [[legacy/app.js, 157, 160]]
+  - id: dangerous-minimum
+    set: plain
+    q: Is there a floor on the dangerous goods fee?
+    gold: [[legacy/app.js, 162, 166]]
+  - id: saturday-sailing
+    set: plain
+    q: Do sailings on a Saturday or Sunday cost more?
+    gold: [[legacy/app.js, 148, 151]]
+  - id: high-season
+    set: plain
+    q: When does the high season start and end?
+    gold: [[legacy/app.js, 139, 146]]
+  - id: missing-bunker-month
+    set: plain
+    q: Which bunker percentage applies when the departure month has no figure yet?
+    gold: [[legacy/app.js, 130, 137]]
+  - id: loyalty-and-dangerous
+    set: plain
+    q: Does the loyalty reduction for top accounts also cut the dangerous cargo fee?
+    gold: [[legacy/app.js, 173, 175]]
+  - id: rounding
+    set: plain
+    q: How is the final amount rounded to coins?
+    gold: [[legacy/app.js, 177, 179]]
+  - id: box-types
+    set: plain
+    q: Which box sizes can be priced and how heavy can each one be?
+    gold: [[legacy/app.js, 20, 21]]
+  - id: health-check
+    set: plain
+    q: What does the server answer to a liveness probe?
+    gold: [[legacy/app.js, 245, 247]]
+  - id: harbours-by-area
+    set: plain
+    q: Can the list of harbours be narrowed to one part of the world?
+    gold: [[legacy/app.js, 253, 261]]
+  - id: cross-domain
+    set: plain
+    q: How can an old browser page load the harbour list from another domain without CORS?
+    gold: [[legacy/app.js, 263, 268]]
+  - id: validation-order
+    set: plain
+    q: In what order are problems with a new pricing request reported?
+    gold: [[legacy/app.js, 277, 285]]
+  - id: weight-with-unit
+    set: plain
+    q: How is a load figure interpreted when letters follow the number?
+    gold: [[legacy/app.js, 287, 288]]
+  - id: limit-before-account
+    set: plain
+    q: Is a box over its limit refused before we check that the account exists?
+    gold: [[legacy/app.js, 288, 289]]
+  - id: offer-validity
+    set: plain
+    q: How many days does a price offer stay valid?
+    gold: [[legacy/app.js, 302, 303]]
+  - id: plain-text-api
+    set: plain
+    q: Which endpoint answers in plain text lines instead of JSON for the oldest integrations?
+    gold: [[legacy/app.js, 335, 343]]
+  - id: stale-offer
+    set: plain
+    q: Can a customer reserve space on an offer that has run out?
+    gold: [[legacy/app.js, 357, 363]]
+  - id: double-reservation
+    set: plain
+    q: What stops the same offer from being reserved twice?
+    gold: [[legacy/app.js, 364, 366]]
+  - id: unknown-reservation
+    set: plain
+    q: Which HTTP status comes back when someone looks up a reservation that does not exist?
+    gold: [[legacy/app.js, 382, 390]]
+  - id: history-pages
+    set: plain
+    q: How many reservations per page in an account's history, and does numbering begin at zero?
+    gold: [[legacy/app.js, 392, 397], [legacy/app.js, 20, 22]]
+  - id: late-cancel-fee
+    set: plain
+    q: What does it cost to call off a reservation five days before the ship leaves?
+    gold: [[legacy/app.js, 405, 423]]
+  - id: after-sailing
+    set: plain
+    q: Can a reservation be called off once the vessel has left?
+    gold: [[legacy/app.js, 416, 418]]
+  - id: update-bunker
+    set: plain
+    q: How do staff change the monthly bunker percentage?
+    gold: [[legacy/app.js, 445, 454]]
+  - id: unparseable-body
+    set: plain
+    q: What does the API reply when the request body cannot be parsed?
+    gold: [[legacy/app.js, 456, 461]]
+  - id: body-size
+    set: plain
+    q: How large can an incoming request payload be?
+    gold: [[legacy/app.js, 238, 238]]
+  - id: pin-clock
+    set: plain
+    q: How can tests pin today's date to a fixed moment?
+    gold: [[legacy/app.js, 75, 79]]
+  - id: offer-columns
+    set: plain
+    q: Which columns are stored for each price offer?
+    gold: [[legacy/db/schema.sql, 25, 38]]
+  - id: premium-accounts
+    set: plain
+    q: Which accounts are on the premium tier?
+    gold: [[legacy/db/seed.sql, 31, 36]]
+  - id: base-rates
+    set: plain
+    q: Where are the base rates per origin, destination and box size kept?
+    gold: [[legacy/db/schema.sql, 8, 14], [legacy/db/seed.sql, 15, 23]]
+  - id: flag-spellings
+    set: plain
+    q: Which spellings of yes are accepted for the dangerous cargo flag?
+    gold: [[legacy/app.js, 195, 197]]
+  - id: db-location
+    set: plain
+    q: Where is the database file kept and which port does the process listen on?
+    gold: [[legacy/server.js, 6, 6], [legacy/server.js, 11, 11]]
+  - id: code-overweight
+    set: code
+    q: where is OVERWEIGHT returned
+    gold: [[legacy/app.js, 288, 289]]
+  - id: code-no-lane
+    set: code
+    q: NO_LANE error
+    gold: [[legacy/app.js, 296, 298]]
+  - id: code-reverse-factor
+    set: code
+    q: REVERSE_LANE_FACTOR
+    gold: [[legacy/app.js, 114, 116], [legacy/app.js, 153, 155]]
+  - id: code-already-cancelled
+    set: code
+    q: ALREADY_CANCELLED
+    gold: [[legacy/app.js, 415, 415]]
+  - id: code-powered-by
+    set: code
+    q: x-powered-by header
+    gold: [[legacy/app.js, 237, 237]]
+  - id: code-parse-failed
+    set: code
+    q: entity.parse.failed
+    gold: [[legacy/app.js, 456, 461]]
+  - id: code-page-size
+    set: code
+    q: PAGE_SIZE offset
+    gold: [[legacy/app.js, 392, 397]]
+  - id: code-fuel-table
+    set: code
+    q: fuel table month pct columns
+    gold: [[legacy/db/schema.sql, 15, 18]]
+  - id: code-insert-or-replace
+    set: code
+    q: INSERT OR REPLACE INTO fuel
+    gold: [[legacy/app.js, 445, 454]]
+  - id: code-callback-regex
+    set: code
+    q: req.query.callback regex
+    gold: [[legacy/app.js, 263, 268]]
+  - id: code-base-cents
+    set: code
+    q: base_cents / 100
+    gold: [[legacy/app.js, 153, 154]]
+  - id: code-quayside-db
+    set: code
+    q: QUAYSIDE_DB env var
+    gold: [[legacy/server.js, 6, 6]]
