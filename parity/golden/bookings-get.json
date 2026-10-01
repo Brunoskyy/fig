@@ -1,9 +1,9 @@
 {
   "route": "bookings-get",
   "match": "GET /api/v1/bookings/:id",
-  "recordedAt": "2026-10-01T11:12:33.283Z",
+  "recordedAt": "2026-10-01T11:41:51.524Z",
   "clock": "2016-11-20T10:00:00Z",
-  "corpusHash": "48d7a613af246681",
+  "corpusHash": "92a6e46fbd05496d",
   "cases": [
     {
       "name": "confirmed booking",

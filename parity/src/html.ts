@@ -84,12 +84,17 @@ export function writeJournalHtml(): string {
     ? readFileSync(file, 'utf8')
         .split('\n')
         .filter((l) => l.startsWith('| ') && !l.startsWith('| time') && !l.startsWith('| ---'))
-        .map((l) => l.slice(2, -2).split(' | '))
+        .map((l) =>
+          l
+            .slice(2, -2)
+            .split(' | ')
+            .map((c) => c.replace(/\\\|/g, '|')),
+        )
     : []
   const body = `<section class="card"><table>${rows
     .map(([time, tool, target, note]) => {
-      const kind = /blocked/i.test(note ?? '') ? 'fail' : /flip|parity/i.test(`${tool} ${note}`) ? 'acc' : 'pass'
-      return `<tr><td class="m mono" style="width:150px">${esc(time ?? '')}</td><td class="o"><span class="pill ${kind}">${esc(tool ?? '')}</span></td><td class="mono">${esc(target ?? '')}${note ? `<div class="why" style="color:var(--muted)">${esc(note)}</div>` : ''}</td></tr>`
+      const kind = /blocked|legacy\/ changed/i.test(note ?? '') ? 'fail' : /routes\.yaml/.test(target ?? '') && tool === 'Edit' ? 'acc' : 'pass'
+      return `<tr><td class="m mono" style="width:190px;white-space:nowrap">${esc(time ?? '')}</td><td class="o"><span class="pill ${kind}">${esc(tool ?? '')}</span></td><td class="mono">${esc(target ?? '')}${note ? `<div class="why" style="color:var(--muted)">${esc(note)}</div>` : ''}</td></tr>`
     })
     .join('')}</table></section>`
   const out = join(ROOT, 'migration', 'journal.html')

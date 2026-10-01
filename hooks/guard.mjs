@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 
 import { tmpdir } from 'node:os'
 
-import { contentAfter, flipBlocker, flips, inRepo, journal, legacyHash, projectRoot, readInput, shellWrites } from './lib.mjs'
+import { contentAfter, flipBlocker, flips, globalChanges, inRepo, journal, legacyHash, projectRoot, readInput, shellWrites } from './lib.mjs'
 
 const FILE_TOOLS = new Set(['Edit', 'MultiEdit', 'Write', 'NotebookEdit'])
 const APPROVAL = /^Approved-by:/m
@@ -30,11 +30,17 @@ export function check(root, tool, input) {
     if (rel === 'edge/routes.yaml') {
       const file = join(root, rel)
       const before = existsSync(file) ? readFileSync(file, 'utf8') : ''
+      const after = contentAfter(tool, input, before)
       let flipped
+      let global
       try {
-        flipped = flips(before, contentAfter(tool, input, before))
+        flipped = flips(before, after)
+        global = globalChanges(before, after)
       } catch (e) {
         return `edge/routes.yaml would no longer parse: ${e.message}`
+      }
+      if (global.length) {
+        return `that edit changes ${global.join(' and ')} in edge/routes.yaml, which moves every unlisted route at once. Flip routes one at a time; the default and the upstreams are changed by a person.`
       }
       for (const match of flipped) {
         const why = flipBlocker(root, match)
@@ -71,10 +77,22 @@ export const stateKey = (input) => `${String(input.session_id ?? 'session').repl
 
 const isMain = process.argv[1] !== undefined && fileURLToPath(import.meta.url) === resolve(process.argv[1])
 if (isMain) {
-  const input = await readInput()
+  let input
+  try {
+    input = await readInput()
+  } catch (e) {
+    process.stderr.write(`Fig blocked this: the guard could not read the tool call (${e.message})\n`)
+    process.exit(2)
+  }
   const root = projectRoot(input)
   const tool = input.tool_name
-  const why = check(root, tool, input.tool_input ?? {})
+  let why
+  try {
+    why = check(root, tool, input.tool_input ?? {})
+  } catch (e) {
+    // Fail closed: a guard that crashes must not let the action through.
+    why = `the Fig guard failed (${e.message}), so the action is refused until that is fixed`
+  }
   if (why) {
     try {
       journal(root, tool, inRepo(root, input.tool_input?.file_path) ?? input.tool_input?.command ?? '', `blocked: ${why}`)

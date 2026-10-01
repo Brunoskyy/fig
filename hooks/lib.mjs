@@ -180,6 +180,16 @@ const targets = (text) => {
   return new Map((doc.routes ?? []).map((r) => [r.match, r.to]))
 }
 
+/** Changes to routes.yaml that move traffic without a per-route flip: the default and the upstreams. */
+export function globalChanges(before, after) {
+  const a = parse(before) ?? {}
+  const b = parse(after) ?? {}
+  const out = []
+  if ((b.default ?? 'legacy') !== (a.default ?? 'legacy')) out.push(`default ${a.default ?? 'legacy'} -> ${b.default ?? 'legacy'}`)
+  if (JSON.stringify(b.upstreams ?? {}) !== JSON.stringify(a.upstreams ?? {})) out.push('upstreams')
+  return out
+}
+
 /** Routes whose target becomes `service` between two versions of routes.yaml. */
 export function flips(before, after) {
   const old = targets(before)
@@ -208,12 +218,18 @@ const cell = (s) =>
     .trim()
     .slice(0, 140)
 
+/** Local paths stay out of the journal, which gets committed: the project root becomes `.`. */
+export const scrub = (root, s) =>
+  String(s ?? '')
+    .split(root)
+    .join('.')
+
 export function journal(root, tool, target, note = '') {
   const file = join(root, 'migration', 'journal.md')
   mkdirSync(dirname(file), { recursive: true })
   if (!existsSync(file)) writeFileSync(file, JOURNAL_HEAD)
   const time = new Date().toISOString().slice(0, 19).replace('T', ' ')
-  appendFileSync(file, `| ${time} | ${cell(tool)} | ${cell(target)} | ${cell(note)} |\n`)
+  appendFileSync(file, `| ${time} | ${cell(tool)} | ${cell(scrub(root, target))} | ${cell(scrub(root, note))} |\n`)
 }
 
 /** What a tool call acted on, in a few words. */

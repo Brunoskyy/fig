@@ -85,19 +85,44 @@ export function loadGolden(route: string, corpus: RouteCorpus): Golden {
   return golden
 }
 
+/** The value at a simple `$.a.b` path of a JSON body, or undefined. */
+function valueAt(body: string, path: string): unknown {
+  let v: unknown
+  try {
+    v = JSON.parse(body)
+  } catch {
+    return undefined
+  }
+  for (const key of path
+    .replace(/^\$\.?/, '')
+    .split('.')
+    .filter(Boolean))
+    v = (v as Record<string, unknown> | undefined)?.[key]
+  return v
+}
+
 /** Replays the recording against the new service and compares every case. */
 export async function replay(route: string, options: { write?: boolean } = {}): Promise<ParityReport> {
   const corpus = loadCorpus(route)
   const golden = loadGolden(route, corpus)
-  const accepted = new Map(corpus.accepted.map((a) => [a.case, a.reason]))
+  const accepted = new Map(corpus.accepted.map((a) => [a.case, a]))
   const service = await start('service', corpus)
   const cases: CaseResult[] = []
   try {
     for (const g of golden.cases) {
       const got = await send(service.url, g.request)
       const differences = compareResponses(g.response, got, { ignore: corpus.ignore })
-      const reason = accepted.get(g.name)
-      const outcome: CaseOutcome = differences.length === 0 ? 'same' : reason ? 'accepted' : 'different'
+      const allowed = accepted.get(g.name)
+      // An accepted case only stays accepted while the difference is the one
+      // that was signed off: same status, same differing paths. A 500 where
+      // a 404 was accepted is a regression, not the intended change.
+      const asAccepted =
+        allowed !== undefined &&
+        got.status === allowed.status &&
+        JSON.stringify(differences.map((d) => d.path).sort()) === JSON.stringify([...allowed.paths].sort()) &&
+        Object.entries(allowed.expect).every(([path, value]) => JSON.stringify(valueAt(got.body, path)) === JSON.stringify(value))
+      const reason = asAccepted ? allowed.reason : undefined
+      const outcome: CaseOutcome = differences.length === 0 ? 'same' : asAccepted ? 'accepted' : 'different'
       cases.push({
         name: g.name,
         request: g.request,

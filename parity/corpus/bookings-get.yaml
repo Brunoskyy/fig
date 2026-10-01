@@ -26,5 +26,11 @@ cases:
 accepted:
   - case: missing booking (Q9, fixed on purpose)
     reason: Q9. The service answers 404 with a structured error; legacy answers 200 {"ok":false}. Kept in shadow until the mobile app reads the status code.
+    status: 404
+    paths: [status, $.ok, $.err, $.error]
+    expect: { $.error.code: NOT_FOUND }
   - case: id that is not a number (Q9, fixed on purpose)
     reason: Q9, same as above.
+    status: 404
+    paths: [status, $.ok, $.err, $.error]
+    expect: { $.error.code: NOT_FOUND }

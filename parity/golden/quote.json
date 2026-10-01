@@ -1,9 +1,9 @@
 {
   "route": "quote",
   "match": "POST /api/v1/quote",
-  "recordedAt": "2026-10-01T11:21:31.877Z",
+  "recordedAt": "2026-10-01T11:41:12.363Z",
   "clock": "2016-11-20T10:00:00Z",
-  "corpusHash": "85c5e683a2261a23",
+  "corpusHash": "d3c3b3192dff1c40",
   "cases": [
     {
       "name": "plain 20DV quote",
@@ -536,6 +536,24 @@
           "content-type": "application/json"
         },
         "body": "[]"
+      },
+      "response": {
+        "status": 400,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"error\":\"bad request\",\"detail\":\"from is required\"}"
+      }
+    },
+    {
+      "name": "JSON sent as text/plain is not parsed",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/quote",
+        "headers": {
+          "content-type": "text/plain"
+        },
+        "body": "{\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"20DV\",\"depart\":\"2016-11-29\"}"
       },
       "response": {
         "status": 400,

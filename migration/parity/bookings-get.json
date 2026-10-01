@@ -2,9 +2,9 @@
   "route": "bookings-get",
   "match": "GET /api/v1/bookings/:id",
   "passed": true,
-  "ranAt": "2026-10-01T11:35:25.372Z",
+  "ranAt": "2026-10-01T11:41:52.139Z",
   "serviceHash": "44686af6578d8d3b",
-  "goldenHash": "fa79806dc2a2527f",
+  "goldenHash": "e0ef1d7bf55cb3bd",
   "ignored": [],
   "counts": {
     "same": 4,

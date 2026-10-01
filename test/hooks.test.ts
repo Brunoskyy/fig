@@ -75,6 +75,21 @@ describe('guard', () => {
     writeFileSync(file, original)
   })
 
+  it('refuses changes that move every route at once', () => {
+    const file = join(scratch, 'edge/routes.yaml')
+    expect(check(scratch, 'Edit', { file_path: file, old_string: 'default: legacy', new_string: 'default: service' })).toMatch(/default legacy -> service/)
+    expect(check(scratch, 'Edit', { file_path: file, old_string: '127.0.0.1:4100', new_string: '127.0.0.1:4200' })).toMatch(/upstreams/)
+  })
+
+  it('fails closed', () => {
+    expect(spawnSync(process.execPath, [join(ROOT, 'hooks', 'guard.mjs')], { input: '{not json', encoding: 'utf8' }).status).toBe(2)
+    const broken = join(scratch, 'parity/corpus/aa-broken.yaml')
+    writeFileSync(broken, 'match: [unclosed')
+    const edit = { file_path: join(scratch, 'edge/routes.yaml'), old_string: 'to: shadow', new_string: 'to: service' }
+    expect(run('guard.mjs', { tool_name: 'Edit', tool_input: edit }).status).toBe(2)
+    rmSync(broken)
+  })
+
   it('computes the same service hash as the parity harness', () => {
     expect(hookServiceHash(ROOT)).toBe(serviceHash())
   })
@@ -106,5 +121,12 @@ describe('journal', () => {
     expect(r.status).toBe(0)
     expect(readFileSync(join(scratch, 'migration/journal.md'), 'utf8')).toMatch(/\| Bash \| npm run parity -- quote \| PASS POST \/api\/v1\/quote \|/)
     expect(spawnSync(process.execPath, [join(ROOT, 'hooks', 'journal.mjs')], { input: 'not json', encoding: 'utf8' }).status).toBe(0)
+  })
+
+  it('keeps local paths out of the committed journal', () => {
+    run('journal.mjs', { tool_name: 'Bash', tool_input: { command: `cd ${scratch}; ls ${scratch}/edge` }, tool_response: {} })
+    const last = readFileSync(join(scratch, 'migration/journal.md'), 'utf8').trim().split('\n').at(-1)!
+    expect(last).toContain('cd .; ls ./edge')
+    expect(last).not.toContain(scratch)
   })
 })

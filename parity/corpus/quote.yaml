@@ -66,6 +66,9 @@ cases:
     body: { from: NLRTM, to: USNYC, container: 20DV, depart: '2016-02-30' }
   - name: array body
     body: []
+  - name: JSON sent as text/plain is not parsed
+    headers: { content-type: text/plain }
+    raw: '{"from":"NLRTM","to":"USNYC","container":"20DV","depart":"2016-11-29"}'
   - name: malformed JSON
     raw: '{"from": "NLRTM",'
   - name: second quote gets the next id

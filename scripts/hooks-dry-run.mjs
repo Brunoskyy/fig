@@ -51,6 +51,8 @@ const cases = [
     2,
     () => appendFileSync(join(root, 'service/src/bookings/bookings.controller.ts'), '\n// changed\n'),
   ],
+  ['make the service the default', 'Write', { file_path: join(root, 'edge/routes.yaml'), content: routes('legacy') + 'default: service\n' }, 2],
+  ['point the legacy upstream at the service', 'Write', { file_path: join(root, 'edge/routes.yaml'), content: routes('legacy').replace('4100', '4200') }, 2],
   ['send a route back to legacy', 'Write', { file_path: join(root, 'edge/routes.yaml'), content: routes('legacy') }, 0],
 ]
 

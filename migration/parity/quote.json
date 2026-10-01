@@ -2,12 +2,12 @@
   "route": "quote",
   "match": "POST /api/v1/quote",
   "passed": true,
-  "ranAt": "2026-10-01T11:35:25.409Z",
+  "ranAt": "2026-10-01T11:41:52.175Z",
   "serviceHash": "44686af6578d8d3b",
-  "goldenHash": "05c02bfdcdce2c41",
+  "goldenHash": "29d50c51211f927c",
   "ignored": [],
   "counts": {
-    "same": 33,
+    "same": 34,
     "accepted": 0,
     "different": 0
   },
@@ -804,6 +804,33 @@
           "content-type": "application/json"
         },
         "body": "[]"
+      },
+      "outcome": "same",
+      "differences": [],
+      "legacy": {
+        "status": 400,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"error\":\"bad request\",\"detail\":\"from is required\"}"
+      },
+      "service": {
+        "status": 400,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"error\":\"bad request\",\"detail\":\"from is required\"}"
+      }
+    },
+    {
+      "name": "JSON sent as text/plain is not parsed",
+      "request": {
+        "method": "POST",
+        "path": "/api/v1/quote",
+        "headers": {
+          "content-type": "text/plain"
+        },
+        "body": "{\"from\":\"NLRTM\",\"to\":\"USNYC\",\"container\":\"20DV\",\"depart\":\"2016-11-29\"}"
       },
       "outcome": "same",
       "differences": [],

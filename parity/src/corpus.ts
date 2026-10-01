@@ -31,7 +31,19 @@ const Corpus = z.object({
   ignore: z.array(z.string()).default([]),
   cases: z.array(Case).min(1),
   /** Cases whose differences are intentional. Reported, never hidden, and they do not fail the run. */
-  accepted: z.array(z.object({ case: z.string(), reason: z.string().min(10) })).default([]),
+  accepted: z
+    .array(
+      z.object({
+        case: z.string(),
+        reason: z.string().min(10),
+        /** The service status the change produces, and exactly which paths differ. Anything else fails. */
+        status: z.number().int(),
+        paths: z.array(z.string()).min(1),
+        /** Values the service must send at these JSON paths, e.g. the error code. */
+        expect: z.record(z.string(), z.unknown()).default({}),
+      }),
+    )
+    .default([]),
 })
 
 export type CorpusCase = z.infer<typeof Case>

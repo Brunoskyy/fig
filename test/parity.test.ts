@@ -3,11 +3,22 @@ import { describe, expect, it, vi } from 'vitest'
 import { diffJson, compareResponses } from '../parity/src/diff.ts'
 import { loadCorpus, routes } from '../parity/src/corpus.ts'
 import { replay } from '../parity/src/harness.ts'
+import type * as LegacyErrors from '../service/src/common/legacy-errors.ts'
 import type * as Pricing from '../service/src/quotes/pricing.ts'
 
 // A plausible porting mistake: the reverse-lane surcharge (Q1) is dropped.
 // Only the quote test below turns it on.
-const broken = vi.hoisted(() => ({ on: false }))
+const broken = vi.hoisted(() => ({ on: false, crash404: false }))
+vi.mock('../service/src/common/legacy-errors.ts', async (importOriginal) => {
+  const real = await importOriginal<typeof LegacyErrors>()
+  class NotFound extends real.NotFound {
+    constructor(what: string) {
+      if (broken.crash404) throw new Error('boom')
+      super(what)
+    }
+  }
+  return { ...real, NotFound }
+})
 vi.mock('../service/src/quotes/pricing.ts', async (importOriginal) => {
   const real = await importOriginal<typeof Pricing>()
   return {
@@ -60,6 +71,20 @@ describe('replay', () => {
     const accepted = report.cases.filter((c) => c.outcome === 'accepted')
     expect(accepted).toHaveLength(2)
     expect(accepted[0]!.differences.find((d) => d.path === 'status')).toEqual({ path: 'status', legacy: 200, service: 404 })
+  })
+
+  it('fails an accepted case when the difference is not the one signed off', async () => {
+    // The intended 404 turns into a crash: the accepted entry pins status 404 and the error code.
+    broken.crash404 = true
+    try {
+      const report = await replay('bookings-get', { write: false })
+      expect(report.passed).toBe(false)
+      const missing = report.cases.find((c) => c.name.startsWith('missing booking'))!
+      expect(missing.outcome).toBe('different')
+      expect(missing.service.status).toBe(500)
+    } finally {
+      broken.crash404 = false
+    }
   })
 
   it('fails with a readable diff when a rule is broken on purpose', async () => {

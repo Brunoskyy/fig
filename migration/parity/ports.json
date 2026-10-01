@@ -2,9 +2,9 @@
   "route": "ports",
   "match": "GET /api/v1/ports",
   "passed": true,
-  "ranAt": "2026-10-01T11:35:25.383Z",
+  "ranAt": "2026-10-01T11:41:52.150Z",
   "serviceHash": "44686af6578d8d3b",
-  "goldenHash": "a02b5d7e18fa7cbe",
+  "goldenHash": "aa88f3044f734fa9",
   "ignored": [],
   "counts": {
     "same": 8,

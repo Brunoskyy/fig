@@ -62,7 +62,11 @@ export function send(
       target,
       {
         method: req.method,
-        headers: { ...forwardHeaders(req.headers, extra), ...(body.length ? { 'content-length': String(body.length) } : {}) },
+        headers: {
+          ...forwardHeaders(req.headers, extra),
+          // GET and HEAD go without a length when empty; anything else always says how long it is.
+          ...(body.length || !['GET', 'HEAD'].includes(req.method) ? { 'content-length': String(body.length) } : {}),
+        },
       },
       (res) => {
         const chunks: Buffer[] = []
@@ -87,7 +91,8 @@ export function send(
       clearTimeout(timer)
       if (!(e instanceof UpstreamError)) reject(new UpstreamError('unreachable', e.message))
     })
-    out.end(body)
+    if (body.length) out.end(body)
+    else out.end()
   })
 }
 
@@ -116,13 +121,16 @@ export function captured(u: Upstreamed): Captured {
   return { status: u.status, headers: flat(u.headers), body: u.body.toString('utf8') }
 }
 
-function reply(res: ServerResponse, u: Upstreamed, route: Target): void {
+function reply(res: ServerResponse, u: Upstreamed, route: Target, method: string): void {
   const headers: Record<string, string | string[]> = {}
   for (const [k, v] of Object.entries(u.headers)) {
-    if (v === undefined || HOP_BY_HOP.has(k) || k === 'content-length') continue
+    if (v === undefined || HOP_BY_HOP.has(k)) continue
+    if (k === 'content-length' && method !== 'HEAD') continue
     headers[k] = v
   }
-  headers['content-length'] = String(u.body.length)
+  // The body was buffered, so its length is known. HEAD keeps the upstream's
+  // length (there is no body to measure), and 204/304 must not have one.
+  if (method !== 'HEAD' && u.status !== 204 && u.status !== 304) headers['content-length'] = String(u.body.length)
   headers['x-fig-route'] = route
   res.writeHead(u.status, headers)
   res.end(u.body)
@@ -177,7 +185,9 @@ export function createEdge(options: EdgeOptions): Server {
       const route = resolve(routes, method, path)
       const target: Target = route?.to ?? config.default
       const started = Date.now()
-      const extra = { 'x-request-id': requestId, 'x-forwarded-for': req.socket.remoteAddress ?? '' }
+      const prior = req.headers['x-forwarded-for']
+      const client = req.socket.remoteAddress ?? ''
+      const extra = { 'x-request-id': requestId, 'x-forwarded-for': prior ? `${String(prior)}, ${client}` : client }
 
       const body = await readBody(req, config.maxBodyBytes)
       if (body === null) {
@@ -188,26 +198,27 @@ export function createEdge(options: EdgeOptions): Server {
 
       try {
         if (target === 'shadow') {
-          const [legacy, service] = await Promise.allSettled([
-            send(config.upstreams.legacy, message, body, config.timeoutMs, extra),
-            send(config.upstreams.service, message, body, config.timeoutMs, extra),
-          ])
-          if (legacy.status === 'rejected') throw legacy.reason
-          reply(res, legacy.value, 'shadow')
-          const differences =
-            service.status === 'fulfilled'
-              ? compareResponses(captured(legacy.value), captured(service.value), { ignore: route?.ignore ?? [] })
-              : [{ path: 'service', legacy: 'answered', service: String((service.reason as Error).message) }]
+          // Both requests start together, but the caller waits only for legacy.
+          const servicePromise = send(config.upstreams.service, message, body, config.timeoutMs, extra).then(
+            (value) => ({ ok: true as const, value }),
+            (error: Error) => ({ ok: false as const, error }),
+          )
+          const legacy = await send(config.upstreams.legacy, message, body, config.timeoutMs, extra)
+          reply(res, legacy, 'shadow', method)
+          log({ requestId, method, url, route: 'shadow', status: legacy.status, ms: Date.now() - started })
+          const service = await servicePromise
+          const differences = service.ok
+            ? compareResponses(captured(legacy), captured(service.value), { ignore: route?.ignore ?? [] })
+            : [{ path: 'service', legacy: 'answered', service: service.error.message }]
           if (differences.length) {
             const record: ShadowRecord = { time: new Date().toISOString(), requestId, route: route!.match, method, url, differences: differences.slice(0, 20) }
             appendFileSync(join(options.shadowDir, `${route!.match.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.jsonl`), JSON.stringify(record) + '\n')
           }
-          log({ requestId, method, url, route: 'shadow', status: legacy.value.status, differences: differences.length, ms: Date.now() - started })
           return
         }
         const upstream = target === 'service' ? config.upstreams.service : config.upstreams.legacy
         const answer = await send(upstream, message, body, config.timeoutMs, extra)
-        reply(res, answer, target)
+        reply(res, answer, target, method)
         log({ requestId, method, url, route: target, status: answer.status, ms: Date.now() - started })
       } catch (e) {
         const timeout = e instanceof UpstreamError && e.kind === 'timeout'

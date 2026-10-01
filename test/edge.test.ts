@@ -176,3 +176,41 @@ describe('edge', () => {
     await close(lonely)
   })
 })
+
+describe('edge in shadow mode', () => {
+  it('answers from legacy without waiting for a slow service', async () => {
+    const legacy = createServer((_, res) => res.end('{"ok":true}'))
+    const service = createServer(() => {
+      /* never answers */
+    })
+    const l = await listen(legacy)
+    const s = await listen(service)
+    const config = parseConfig(yaml(l, s, '  - { match: "GET /x", to: shadow }').replace('timeoutMs: 300', 'timeoutMs: 2000'))
+    const edge = createEdge({ config, shadowDir: mkdtempSync(join(tmpdir(), 'fig-shadow-')), log: () => {} })
+    const base = await listen(edge)
+    const started = Date.now()
+    const res = await fetch(`${base}/x`)
+    expect(res.status).toBe(200)
+    expect(Date.now() - started).toBeLessThan(1000)
+    await Promise.all([close(edge), close(legacy), close(service)])
+  })
+
+  it('appends to X-Forwarded-For and keeps HEAD lengths', async () => {
+    const upstream = createServer((req, res) => {
+      res.writeHead(200, { 'content-type': 'application/json', 'content-length': '12', 'x-xff': String(req.headers['x-forwarded-for']) })
+      res.end(req.method === 'HEAD' ? undefined : '{"a":"1234"}')
+    })
+    const u = await listen(upstream)
+    const edge = createEdge({
+      config: parseConfig(yaml(u, u, '  - { match: "GET /h", to: service }')),
+      shadowDir: mkdtempSync(join(tmpdir(), 'fig-shadow-')),
+      log: () => {},
+    })
+    const base = await listen(edge)
+    const get = await fetch(`${base}/h`, { headers: { 'x-forwarded-for': '203.0.113.9' } })
+    expect(get.headers.get('x-xff')).toBe('203.0.113.9, 127.0.0.1')
+    const head = await fetch(`${base}/h`, { method: 'HEAD' })
+    expect(head.headers.get('content-length')).toBe('12')
+    await Promise.all([close(edge), close(upstream)])
+  })
+})

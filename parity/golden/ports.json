@@ -1,7 +1,7 @@
 {
   "route": "ports",
   "match": "GET /api/v1/ports",
-  "recordedAt": "2026-10-01T11:12:33.290Z",
+  "recordedAt": "2026-10-01T11:41:12.335Z",
   "clock": "2016-11-20T10:00:00Z",
   "corpusHash": "864610f217ae330a",
   "cases": [
