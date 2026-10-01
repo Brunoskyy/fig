@@ -26,9 +26,7 @@ const table = [
     results.map((r) => `| ${r.mode} | ${set} | ${r[set].n} | ${f(r[set].recallAt5)} | ${f(r[set].mrr)} | ${f(r[set].hitAt1)} |`),
   ),
 ].join('\n')
-const misses = results
-  .flatMap((r) => r.questions.filter((q) => q.firstHit === null).map((q) => `- ${r.mode}: \`${q.id}\` (${q.set})`))
-  .join('\n')
+const misses = results.flatMap((r) => r.questions.filter((q) => q.firstHit === null).map((q) => `- ${r.mode}: \`${q.id}\` (${q.set})`)).join('\n')
 writeFileSync(
   join(ROOT, 'index', 'eval', 'RESULTS.md'),
   `# Index eval, ${date}\n\n${questions.length} questions (plain: business words only; code: names copied from the code) over ${index.chunks.length} chunks of the legacy code. Model ${MODEL}, RRF k = ${RRF_K}. Raw run: [runs/${date}.json](runs/${date}.json).\n\n${table}\n\nMissed in the top 5:\n\n${misses || '- none'}\n`,

@@ -85,8 +85,17 @@ describe('eval set', () => {
         const lines = readFileSync(join(ROOT, g[0]), 'utf8').split('\n')
         expect(g[1], q.id).toBeLessThanOrEqual(g[2])
         expect(g[2], q.id).toBeLessThanOrEqual(lines.length)
-        expect(lines.slice(g[1] - 1, g[2]).join('').trim(), q.id).not.toBe('')
-        expect(chunks.some((c) => covers(c, g)), q.id).toBe(true)
+        expect(
+          lines
+            .slice(g[1] - 1, g[2])
+            .join('')
+            .trim(),
+          q.id,
+        ).not.toBe('')
+        expect(
+          chunks.some((c) => covers(c, g)),
+          q.id,
+        ).toBe(true)
       }
     }
   })
@@ -104,7 +113,11 @@ describe('eval set', () => {
       for (const n of names) expect(q.q.includes(n), `${q.id} uses "${n}"`).toBe(false)
       for (const c of gold) {
         const words = c.text.toLowerCase().match(/[a-z]+/g) ?? []
-        const question = q.q.toLowerCase().match(/[a-z]+/g)?.join(' ') ?? ''
+        const question =
+          q.q
+            .toLowerCase()
+            .match(/[a-z]+/g)
+            ?.join(' ') ?? ''
         for (let i = 0; i + 4 <= words.length; i += 1) {
           const run = words.slice(i, i + 4).join(' ')
           expect(question.includes(run), `${q.id} copies "${run}"`).toBe(false)
@@ -114,8 +127,17 @@ describe('eval set', () => {
   })
 
   it('scores recall over ranges and the rank of the first hit', () => {
-    const q = { id: 'x', set: 'plain' as const, q: 'question', gold: [['a.js', 10, 12] as [string, number, number], ['a.js', 40, 41] as [string, number, number]] }
-    const hit = (start: number, end: number, rank: number) => ({ chunk: { id: `a.js:${start}`, file: 'a.js', start, end, kind: 'function' as const, name: 'f', text: '' }, score: 1, rank })
+    const q = {
+      id: 'x',
+      set: 'plain' as const,
+      q: 'question',
+      gold: [['a.js', 10, 12] as [string, number, number], ['a.js', 40, 41] as [string, number, number]],
+    }
+    const hit = (start: number, end: number, rank: number) => ({
+      chunk: { id: `a.js:${start}`, file: 'a.js', start, end, kind: 'function' as const, name: 'f', text: '' },
+      score: 1,
+      rank,
+    })
     expect(score(q, [hit(1, 5, 1), hit(11, 20, 2)])).toMatchObject({ firstHit: 2, recall: 0.5 })
   })
 })

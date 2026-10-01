@@ -5,8 +5,7 @@ import { REPORT_DIR, ROOT, routes, serviceHash } from './corpus.ts'
 import type { ParityReport } from './harness.ts'
 import { reportFile } from './harness.ts'
 
-const esc = (s: unknown) =>
-  String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
+const esc = (s: unknown) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
 
 const show = (v: unknown) => (v === undefined ? 'missing' : JSON.stringify(v))
 
@@ -41,7 +40,12 @@ function page(title: string, sub: string, body: string): string {
 function routeCard(r: ParityReport, currentHash: string): string {
   const rows = r.cases
     .map((c) => {
-      const pill = c.outcome === 'same' ? '<span class="pill pass">same</span>' : c.outcome === 'accepted' ? '<span class="pill acc">accepted</span>' : '<span class="pill fail">different</span>'
+      const pill =
+        c.outcome === 'same'
+          ? '<span class="pill pass">same</span>'
+          : c.outcome === 'accepted'
+            ? '<span class="pill acc">accepted</span>'
+            : '<span class="pill fail">different</span>'
       const diffs = c.differences.length
         ? `<div class="diff mono">${c.differences
             .slice(0, 8)

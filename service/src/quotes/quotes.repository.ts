@@ -39,9 +39,7 @@ export class QuotesRepository {
 
   /** The latest fuel percentage published on or before the month, or 0 (Q8). */
   fuel(month: string): number {
-    const row = this.db.prepare('SELECT pct FROM fuel WHERE month <= ? ORDER BY month DESC LIMIT 1').get(month) as
-      | { pct: number }
-      | undefined
+    const row = this.db.prepare('SELECT pct FROM fuel WHERE month <= ? ORDER BY month DESC LIMIT 1').get(month) as { pct: number } | undefined
     return row ? row.pct : 0
   }
 

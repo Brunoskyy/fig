@@ -1,5 +1,5 @@
 import { mkdtempSync, readdirSync, readFileSync } from 'node:fs'
-import { createServer, request as httpRequest, type Server } from 'node:http'
+import { createServer, request as httpRequest, type IncomingHttpHeaders, type Server, type ServerResponse } from 'node:http'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -10,7 +10,7 @@ import { compile, parseConfig, resolve } from '../edge/src/routes.ts'
 import { close, listen } from './helpers.ts'
 
 /** A fake upstream that echoes what it received, so tests can see exactly what the edge forwarded. */
-function echo(name: string, overrides: Record<string, (res: import('node:http').ServerResponse) => void> = {}): Server {
+function echo(name: string, overrides: Record<string, (res: ServerResponse) => void> = {}): Server {
   return createServer((req, res) => {
     const chunks: Buffer[] = []
     req.on('data', (c: Buffer) => chunks.push(c))
@@ -105,15 +105,19 @@ describe('edge', () => {
 
   it('forwards method, body and end-to-end headers, and drops hop-by-hop ones', async () => {
     // fetch() refuses to send Connection, so this one goes through node:http.
-    const { status, headers, body } = await new Promise<{ status: number; headers: import('node:http').IncomingHttpHeaders; body: string }>((ok, ko) => {
-      const req = httpRequest(`${base}/api/v1/quote`, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', 'x-request-id': 'req-1', 'x-custom': 'yes', 'x-kept': 'yes', connection: 'x-custom' },
-      }, (res) => {
-        const chunks: Buffer[] = []
-        res.on('data', (c: Buffer) => chunks.push(c))
-        res.on('end', () => ok({ status: res.statusCode ?? 0, headers: res.headers, body: Buffer.concat(chunks).toString() }))
-      })
+    const { status, headers, body } = await new Promise<{ status: number; headers: IncomingHttpHeaders; body: string }>((ok, ko) => {
+      const req = httpRequest(
+        `${base}/api/v1/quote`,
+        {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', 'x-request-id': 'req-1', 'x-custom': 'yes', 'x-kept': 'yes', connection: 'x-custom' },
+        },
+        (res) => {
+          const chunks: Buffer[] = []
+          res.on('data', (c: Buffer) => chunks.push(c))
+          res.on('end', () => ok({ status: res.statusCode ?? 0, headers: res.headers, body: Buffer.concat(chunks).toString() }))
+        },
+      )
       req.on('error', ko)
       req.end('{"from":"NLRTM"}')
     })

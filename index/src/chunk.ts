@@ -109,7 +109,11 @@ export function chunkJs(file: string, source: string): Chunk[] {
     run = []
   }
   for (const stmt of program.body) {
-    if (stmt.type === 'VariableDeclaration' && !(stmt.declarations[0]?.init?.type === 'CallExpression' && (stmt.declarations[0].init.callee as unknown as AnyNode).name === 'require')) run.push(stmt)
+    if (
+      stmt.type === 'VariableDeclaration' &&
+      !(stmt.declarations[0]?.init?.type === 'CallExpression' && (stmt.declarations[0].init.callee as unknown as AnyNode).name === 'require')
+    )
+      run.push(stmt)
     else flush()
   }
   flush()

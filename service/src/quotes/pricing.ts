@@ -62,10 +62,7 @@ export function price(lane: Lane, input: PriceInput, fuelPct: number, goldCustom
   if (lane.reversed) base = base * REVERSE_LANE_FACTOR
 
   // `>` and not `>=`: exactly 20,000 kg carries no surcharge (Q2). NaN fails both.
-  const weight =
-    input.weightKg > WEIGHT_FREE_KG
-      ? Math.ceil((input.weightKg - WEIGHT_FREE_KG) / WEIGHT_STEP_KG) * WEIGHT_STEP_USD
-      : 0
+  const weight = input.weightKg > WEIGHT_FREE_KG ? Math.ceil((input.weightKg - WEIGHT_FREE_KG) / WEIGHT_STEP_KG) * WEIGHT_STEP_USD : 0
 
   let hazardous = 0
   if (input.hazardous) {

@@ -26,7 +26,8 @@ export function loadQuestions(file = QUESTIONS): EvalQuestion[] {
 }
 
 /** A chunk answers a gold range when it is in the same file and the lines overlap. */
-export const covers = (c: Pick<Chunk, 'file' | 'start' | 'end'>, [file, start, end]: z.infer<typeof Gold>) => c.file === file && c.start <= end && c.end >= start
+export const covers = (c: Pick<Chunk, 'file' | 'start' | 'end'>, [file, start, end]: z.infer<typeof Gold>) =>
+  c.file === file && c.start <= end && c.end >= start
 
 export interface QuestionResult {
   id: string

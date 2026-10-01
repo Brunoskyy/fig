@@ -6,9 +6,7 @@ import { MAX_WEIGHT_KG, type QuoteRequest } from './quote-request.ts'
 import { QuotesRepository, type QuoteRow } from './quotes.repository.ts'
 
 export type QuoteResult =
-  | { ok: true; quote: ReturnType<typeof quoteJson> }
-  | { ok: false; err: 'OVERWEIGHT'; max: number }
-  | { ok: false; err: 'NO_LANE' | 'NO_CUSTOMER' }
+  { ok: true; quote: ReturnType<typeof quoteJson> } | { ok: false; err: 'OVERWEIGHT'; max: number } | { ok: false; err: 'NO_LANE' | 'NO_CUSTOMER' }
 
 export function quoteJson(row: QuoteRow) {
   return {
@@ -52,12 +50,7 @@ export class QuotesService {
     const lane = this.repo.lane(req.from, req.to, req.container)
     if (!lane) return { ok: false, err: 'NO_LANE' }
 
-    const p = price(
-      lane,
-      { weightKg: req.weightKg, hazardous: req.hazardous, depart: req.depart },
-      this.repo.fuel(ymd(req.depart).slice(0, 7)),
-      gold,
-    )
+    const p = price(lane, { weightKg: req.weightKg, hazardous: req.hazardous, depart: req.depart }, this.repo.fuel(ymd(req.depart).slice(0, 7)), gold)
     const created = this.clock.now()
     const row = this.repo.insert({
       customer_id: customerId,

@@ -3,12 +3,13 @@ import { describe, expect, it, vi } from 'vitest'
 import { diffJson, compareResponses } from '../parity/src/diff.ts'
 import { loadCorpus, routes } from '../parity/src/corpus.ts'
 import { replay } from '../parity/src/harness.ts'
+import type * as Pricing from '../service/src/quotes/pricing.ts'
 
 // A plausible porting mistake: the reverse-lane surcharge (Q1) is dropped.
 // Only the quote test below turns it on.
 const broken = vi.hoisted(() => ({ on: false }))
 vi.mock('../service/src/quotes/pricing.ts', async (importOriginal) => {
-  const real = await importOriginal<typeof import('../service/src/quotes/pricing.ts')>()
+  const real = await importOriginal<typeof Pricing>()
   return {
     ...real,
     price: (lane: Parameters<typeof real.price>[0], ...rest: Parameters<typeof real.price> extends [unknown, ...infer R] ? R : never) =>

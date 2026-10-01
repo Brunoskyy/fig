@@ -1,5 +1,7 @@
 const STOP = new Set(
-  'a an and are as at be by can do does for from has have how i if in is it its of on or the this to was what when where which who why will with var function return null true false req res err cb next'.split(' '),
+  'a an and are as at be by can do does for from has have how i if in is it its of on or the this to was what when where which who why will with var function return null true false req res err cb next'.split(
+    ' ',
+  ),
 )
 
 /** Words for keyword search: identifiers split at camelCase and underscores, lowercased, lightly stemmed. */

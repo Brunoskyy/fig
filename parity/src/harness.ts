@@ -98,7 +98,15 @@ export async function replay(route: string, options: { write?: boolean } = {}): 
       const differences = compareResponses(g.response, got, { ignore: corpus.ignore })
       const reason = accepted.get(g.name)
       const outcome: CaseOutcome = differences.length === 0 ? 'same' : reason ? 'accepted' : 'different'
-      cases.push({ name: g.name, request: g.request, outcome, ...(reason && differences.length ? { reason } : {}), differences, legacy: g.response, service: got })
+      cases.push({
+        name: g.name,
+        request: g.request,
+        outcome,
+        ...(reason && differences.length ? { reason } : {}),
+        differences,
+        legacy: g.response,
+        service: got,
+      })
     }
   } finally {
     await service.stop()
@@ -123,10 +131,12 @@ export async function replay(route: string, options: { write?: boolean } = {}): 
   return report
 }
 
-const show = (v: unknown) => (typeof v === 'string' ? JSON.stringify(v) : JSON.stringify(v) ?? 'undefined')
+const show = (v: unknown) => (typeof v === 'string' ? JSON.stringify(v) : (JSON.stringify(v) ?? 'undefined'))
 
 export function summarize(report: ParityReport): string {
-  const lines = [`${report.passed ? 'PASS' : 'FAIL'} ${report.match}  same ${report.counts.same}, accepted ${report.counts.accepted}, different ${report.counts.different}`]
+  const lines = [
+    `${report.passed ? 'PASS' : 'FAIL'} ${report.match}  same ${report.counts.same}, accepted ${report.counts.accepted}, different ${report.counts.different}`,
+  ]
   if (report.ignored.length) lines.push(`  ignoring: ${report.ignored.join(', ')}`)
   for (const c of report.cases) {
     if (c.outcome === 'same') continue

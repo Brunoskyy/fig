@@ -49,7 +49,13 @@ function forwardHeaders(headers: IncomingHttpHeaders, extra: Record<string, stri
   return { ...out, ...extra }
 }
 
-export function send(base: string, req: { method: string; url: string; headers: IncomingHttpHeaders }, body: Buffer, timeoutMs: number, extra: Record<string, string>): Promise<Upstreamed> {
+export function send(
+  base: string,
+  req: { method: string; url: string; headers: IncomingHttpHeaders },
+  body: Buffer,
+  timeoutMs: number,
+  extra: Record<string, string>,
+): Promise<Upstreamed> {
   const target = new URL(req.url, base)
   return new Promise((resolvePromise, reject) => {
     const out = httpRequest(
@@ -124,7 +130,12 @@ function reply(res: ServerResponse, u: Upstreamed, route: Target): void {
 
 function fail(res: ServerResponse, status: number, message: string, requestId: string): void {
   const body = JSON.stringify({ error: { code: status === 504 ? 'UPSTREAM_TIMEOUT' : status === 413 ? 'TOO_LARGE' : 'UPSTREAM_UNREACHABLE', message } })
-  res.writeHead(status, { 'content-type': 'application/json; charset=utf-8', 'content-length': Buffer.byteLength(body), 'x-request-id': requestId, 'x-fig-route': 'edge' })
+  res.writeHead(status, {
+    'content-type': 'application/json; charset=utf-8',
+    'content-length': Buffer.byteLength(body),
+    'x-request-id': requestId,
+    'x-fig-route': 'edge',
+  })
   res.end(body)
 }
 
