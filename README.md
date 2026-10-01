@@ -11,21 +11,21 @@
 
 <br>
 
-Rewriting a legacy backend in one go fails for a boring reason: nobody knows everything the old
-code does. The rules that matter live in handlers, in a `<=` that should have been `<`, in a
-rounding step finance reconciles against. The strangler fig pattern avoids the big bang. A proxy
-sits in front, routes move to the new service one at a time, and each move is reversible.
+The name comes from the strangler fig, which grows around a tree until it replaces it. The
+pattern named after it migrates a legacy backend the same way: a proxy sits in front, routes move
+to the new service one at a time, and each move is reversible. Rewriting in one go fails because
+nobody knows everything the old code does; the rules live in handlers, in a `<=` that should have
+been `<`, in a rounding step finance reconciles against.
 
-Fig is that process packaged as a Claude Code plugin, with the parts that make it safe to hand to
-an agent. A parity harness records what the legacy system actually answers and replays it
-against the new code. Hooks keep the agent's hands off the legacy code, and they refuse a route
-flip unless parity passes when the hook runs it. A local search index over the legacy code makes
-every rule in a plan cite its lines, and an eval shows how often that search finds the right ones.
+Fig is that process as a Claude Code plugin, with the parts that make it safe to hand to an
+agent: a parity harness that records what legacy answers and replays it against the new code,
+hooks that keep the agent off the legacy code and refuse a flip unless parity passes, and a
+local search index so every rule in a plan cites its lines, with an eval of how often it finds
+the right ones.
 
-The legacy system it migrates is in the repo. **Quayside** is a fictional shipping-quote API in
-2014 style, 473 lines in one `app.js`: Express callbacks, raw SQL, float dollars and twelve
-documented quirks. Three of its 11 routes are migrated. Two serve from the new service, and one
-runs in shadow mode with a deliberate behaviour change.
+The legacy system is in the repo. **Quayside** is a fictional 2014-style shipping-quote API, 473
+lines in one `app.js` with raw SQL, float dollars and twelve documented quirks. Three of its 11
+routes are migrated: two serve from the new service, one runs in shadow mode.
 
 <p align="center">
   <img src="docs/screenshots/parity-light.png" width="49%" alt="Parity report: bookings by id passes with four same cases and two accepted differences, each showing the 200 vs 404 diff">
@@ -34,32 +34,49 @@ runs in shadow mode with a deliberate behaviour change.
 
 ## Running it
 
-Node 24 (`nvm use`). Everything runs locally; the embedding model is read from `~/.cache/fig-models`.
+You need Node 24 (`nvm use` reads the `.nvmrc`), and Claude Code for the plugin. No database or
+Docker: everything uses `node:sqlite` files under `data/`.
 
-```bash
-npm install
-npm run parity                 # replay recorded legacy traffic against the service, all routes
-npm run demo:shadow            # legacy + service + edge as real processes, traffic through the edge
-npm run index:query -- "what does it cost to cancel five days before sailing?"
-npm run index:eval             # writes index/eval/runs/<date>.json and RESULTS.md
-npm run hooks:dry-run          # feed the guard the tool calls Claude Code would send
-```
+1. Clone and install:
 
-The first `index:build` needs the model (`Xenova/bge-small-en-v1.5`, quantized, 33 MB). Set
-`FIG_ALLOW_DOWNLOAD=1` once to fetch it into the cache, or point `FIG_MODELS` at a copy.
+   ```bash
+   git clone https://github.com/Brunoskyy/fig.git && cd fig
+   nvm use
+   npm install
+   ```
 
-To run the pieces by hand: `npm run legacy` (port 4100), `npm run service` (4200) and
-`npm run edge` (4000). They share `data/quayside.db`.
+2. From the repo root, each of these runs and exits on its own:
 
-### Loading the plugin
+   ```bash
+   npm run parity          # replay recorded legacy traffic against the service, all routes
+   npm run demo:shadow     # legacy, service and edge as real processes, traffic through the edge
+   npm run hooks:dry-run   # feed the guard the tool calls Claude Code would send
+   FIG_ALLOW_DOWNLOAD=1 npm run index:query -- "what does it cost to cancel five days before sailing?"
+   npm run index:eval      # writes index/eval/runs/<date>.json and RESULTS.md
+   ```
 
-```bash
-claude --plugin-dir .
-```
+   `npm run parity` rewrites the reports in `migration/parity/`. The first index command
+   downloads the embedding model (33 MB) into `~/.cache/fig-models`; after that,
+   `FIG_ALLOW_DOWNLOAD` is not needed.
 
-That lists `/fig:survey`, `/fig:plan`, `/fig:port`, `/fig:parity` and `/fig:flip`, plus the
-`fig:rule-auditor` agent, and turns on the hooks for that session. `claude plugin validate .`
-checks the manifest.
+3. To load the plugin, from the repo root:
+
+   ```bash
+   claude --plugin-dir .
+   ```
+
+   That lists `/fig:survey`, `/fig:plan`, `/fig:port`, `/fig:parity` and `/fig:flip`, plus the
+   `fig:rule-auditor` agent, and turns on the hooks for that session.
+
+To run the pieces by hand, use three terminals from the repo root: `npm run legacy` (port 4100),
+`npm run service` (4200) and `npm run edge` (4000, the one to call). Stop each with Ctrl+C. They
+share `data/quayside.db`; delete `data/` to reset it.
+
+| Command (repo root) | |
+| --- | --- |
+| `npm test` | 81 tests |
+| `npm run typecheck` / `npm run lint` | `tsc --noEmit` and ESLint |
+| `npm run approve -- <route>` | approve a plan; only you run this |
 
 ## How it works
 
@@ -68,28 +85,20 @@ checks the manifest.
 </p>
 
 **The edge** (`edge/`) is about 300 lines on `node:http`. Each route in `edge/routes.yaml` goes to
-`legacy`, `service` or `shadow`. In shadow mode the request goes to both sides, the caller gets
-the legacy answer as soon as legacy responds, and the service's answer is diffed and appended to
-`migration/shadow/`. Shadow is refused for writing methods, because both sides share one
-database and the write would happen twice. The edge drops hop-by-hop headers, including the ones
-named in `Connection`. It caps body size, applies one deadline per exchange, answers 502 or 504
-when an upstream fails, and carries an `x-request-id` through.
+`legacy`, `service` or `shadow`. In shadow mode the caller gets the legacy answer and the
+service's answer is diffed into `migration/shadow/`. Shadow is refused for writes, because both
+sides share one database and the write would happen twice.
 
 **Parity** (`parity/`) is characterization testing. A corpus per route lists requests, one or
-more per rule and per boundary. `npm run record` sends them to the legacy app on a fresh, seeded
-database with the clock frozen at 2016-11-20 10:00 UTC, and keeps the answers verbatim.
-`npm run parity` replays them against the service on its own fresh database and compares status,
-content type and parsed JSON bodies. Key order doesn't count, but types and values do: `1982` and
-`"1982"` differ. There are two escape hatches, and both show in the report. `ignore:` lists exact
-JSON paths for volatile fields; none of the three routes needs any. `accepted:` lists intentional
-changes. Each pins the service status, the exact set of differing paths and the error code. If
-any of those drift, the case fails again.
+more per rule and boundary. `npm run record` sends them to legacy on a fresh seeded database with
+the clock frozen, and `npm run parity` replays them against the service and compares status,
+content type and JSON bodies, where `1982` and `"1982"` differ. `accepted:` entries pin an
+intentional change to its exact status, paths and error code, so any drift fails again.
 
-**The index** (`index/`) cuts `legacy/app.js` along its acorn AST: one chunk per route handler,
-per function and per run of top-level constants. Each chunk keeps the comment block above it.
-Oversized functions are split, and their setup code gets its own chunk. SQL files are cut per
-statement. Search is BM25, or bge-small cosine similarity, or both fused with reciprocal rank
-fusion (k = 60). `QUIRKS.md` is not indexed, because it restates the rules in plain words.
+**The index** (`index/`) cuts `legacy/app.js` along its acorn AST, one chunk per route handler,
+function and run of constants, and SQL per statement. Search is BM25, bge-small cosine
+similarity, or both fused with reciprocal rank fusion (k = 60). `QUIRKS.md` is not indexed,
+because it restates the rules in plain words.
 
 **The plugin** (`.claude-plugin/`, `skills/`, `agents/`, `hooks/`) is the workflow:
 
@@ -104,25 +113,17 @@ fusion (k = 60). `QUIRKS.md` is not indexed, because it restates the rules in pl
 
 The hooks enforce what the skills only ask for:
 
-- **No edits under `legacy/`.** This covers Edit, Write and MultiEdit, through symlinks and in
-  any letter case. It also covers shell commands, through a small quote-aware parser that finds
-  redirect targets, `sed -i`, `yq -i`, `cp`, `mv`, `git checkout` and similar, and follows `cd`.
-  A post-command check hashes the protected files before and after every Bash call and catches
-  what the parser can't see, such as `node -e`.
-- **No forged evidence.** Recordings, reports, the harness and the hooks can't be written by the
-  agent. Adding `accepted:` or `ignore:` entries to a corpus is the person's call, like an
-  approval.
-- **No flip without proof.** An edit that sends a route to `service` makes the guard record
-  legacy again, check that the recording on disk still matches, and replay the service itself.
-  It doesn't take a report's word for it. Changing the default or the upstreams is refused
-  outright. The guard fails closed: a crash, a missing dependency or a state file it can't
-  write blocks the call.
-- **No self-approval.** `npm run approve` records who approved and a hash of the plan text, and
-  a plan edited after that no longer counts as approved. The agent can't write those lines, edit
-  an approved plan or run the script, however it's spelled. You approve a plan by running it
-  yourself (`! npm run approve -- quote`).
-- **A journal.** Every tool call is appended to `migration/journal.md`, with local paths
-  replaced by `.`. `npm run report` renders it, and the parity reports, as small HTML pages.
+- **No edits under `legacy/`:** Edit and Write through symlinks and any letter case, and shell
+  commands through a quote-aware parser (`sed -i`, redirects, `cp`, `mv`, `cd`). A post-command
+  hash check catches what the parser can't see, such as `node -e`.
+- **No forged evidence:** the agent can't write recordings, reports, the harness or the hooks,
+  and `accepted:` entries are the person's call.
+- **No flip without proof:** sending a route to `service` makes the guard record legacy again and
+  replay the service itself, instead of trusting a report. It fails closed.
+- **No self-approval:** `npm run approve` stores who approved and a hash of the plan, an edited
+  plan stops counting, and the agent can't run the script. You run it yourself
+  (`! npm run approve -- quote`).
+- **A journal:** every tool call goes to `migration/journal.md`; `npm run report` renders it as HTML.
 
 ## The worked migration
 
@@ -132,31 +133,23 @@ The hooks enforce what the skills only ask for:
 | `POST /api/v1/quote`                   | service | 34 same            |
 | `GET /api/v1/bookings/:id`             | shadow  | 4 same, 2 accepted |
 
-Quote holds most of the rules: a reverse-lane surcharge, weight steps, a hazardous minimum the
-gold discount skips, peak season ending a day before the rate card says, round-up-to-5-cents
-float arithmetic and a fuel-month fallback. The port reproduces all of it on purpose.
-`test/pricing.test.ts` runs both `price()` functions on 5,000 generated quotes and requires
-identical output.
+Quote holds most of the rules: a reverse-lane surcharge, weight steps, peak season ending a day
+before the rate card says, and round-up-to-5-cents float arithmetic. The port reproduces all of
+it, and `test/pricing.test.ts` runs both `price()` functions on 5,000 generated quotes and
+requires identical output. Bookings by id fixes quirk Q9: a missing booking was
+`200 {"ok": false}` and is now a 404, accepted in the corpus, and the route stays in shadow until
+the mobile app reads status codes.
 
-Bookings by id fixes quirk Q9. A missing booking was `200 {"ok": false}`, and the service
-answers 404. That difference is accepted in the corpus, and the route stays in shadow until the
-mobile app reads status codes. `npm run demo:shadow` shows the difference turning up in the
-shadow log from real traffic.
-
-The plans, approvals, reports, routes file and journal in `migration/` and `edge/routes.yaml`
-come from real Claude Code sessions with the plugin loaded: `/fig:parity`, then three
-`/fig:flip` runs. One of those sessions asked for a legacy edit, and the guard missed it. It was
-a `sed -i` whose script contained a `;`, and my first matcher split on that. The journal keeps
-that row. The rows after the fix show the same request blocked twice, once through Bash and once
-through Edit.
+Everything in `migration/` comes from real Claude Code sessions with the plugin loaded. In one,
+the guard missed a legacy edit: a `sed -i` whose script contained a `;`, which my first matcher
+split on. The journal keeps that row, and the rows after the fix show the same request blocked
+twice.
 
 ## Index eval
 
-44 questions, each with the line ranges that answer it. 32 use business words only ("what extra
-do we charge when a box weighs more than twenty tonnes?"). A test checks that those never use a
-name from the code they point at, or copy four words in a row from it. The other 12 are what you
-type after seeing a name in a stack trace (`ALREADY_CANCELLED`, `base_cents / 100`). A hit is a
-top-5 chunk overlapping a gold range.
+44 questions with the line ranges that answer them: 32 in business words only, checked by a test
+never to use a name or four copied words from the code, and 12 typed after seeing a name in a
+stack trace. A hit is a top-5 chunk overlapping a gold range.
 
 | mode    | plain recall@5 | plain MRR | code recall@5 | code MRR | all recall@5 | all MRR |
 | ------- | -------------- | --------- | ------------- | -------- | ------------ | ------- |
@@ -164,49 +157,26 @@ top-5 chunk overlapping a gold range.
 | vector  | 0.703          | 0.628     | 0.750         | 0.625    | 0.716        | 0.627   |
 | hybrid  | 0.719          | 0.454     | 0.917         | 0.833    | 0.773        | 0.558   |
 
-Hybrid has the best recall over all questions, and it beats keyword on every number except the
-code set, where keyword search alone is better. On plain questions, vector search alone ranks the
-right chunk higher. RRF gives a confused keyword list as much weight as a good vector list. I left
-that as measured rather than tune weights against the same 44 questions. The raw run, with
-per-question ranks, is in `index/eval/runs/`.
+Hybrid has the best recall overall, but keyword wins on the code set and vector ranks plain
+questions higher, because RRF weighs a confused keyword list as much as a good vector one. I left
+that as measured rather than tune weights against the same 44 questions.
 
 ## Things worth opening
 
-**`hooks/policy.mjs` and `hooks/lib.mjs`.** The guard turns an Edit's old and new strings into the
-file it would leave behind, then diffs `routes.yaml` before and after to find flips. The shell
-parser is about 120 lines, and the comment above it says plainly what it can't do.
-
-**`parity/src/harness.ts`.** Record and replay, and what "accepted" has to match before a
-difference is let through. `verify.ts` is what the flip guard runs.
-
-**`service/src/quotes/pricing.ts`.** Legacy arithmetic reproduced on purpose, every constant
-named, and every kept quirk tagged with its number in `legacy/QUIRKS.md`.
-
-**`parity/corpus/quote.yaml`.** The rules as requests. It adds a cheap lane in its setup SQL,
-because no seeded lane reaches the $95 hazardous minimum. Without it, that rule would be ported
-but never proven.
-
-**`skills/`.** Five short skills that write things down: plans in a fixed shape, citations as
-`file:start-end`, and a three-bucket triage for every parity difference.
+- **`hooks/policy.mjs`:** turns an Edit into the file it would leave behind and diffs
+  `routes.yaml` to find flips. The shell parser's comment says plainly what it can't do.
+- **`parity/src/harness.ts`:** record, replay, and what "accepted" has to match.
+- **`service/src/quotes/pricing.ts`:** legacy arithmetic reproduced on purpose, each kept quirk
+  tagged with its number in `legacy/QUIRKS.md`.
+- **`parity/corpus/quote.yaml`:** the rules as requests, with setup SQL for a lane cheap enough to
+  hit the $95 hazardous minimum.
 
 ## Tests
 
-```bash
-npm test             # 81 tests
-npm run typecheck
-npm run lint
-```
-
-The suites cover the edge with fake upstreams (headers, timeouts, 413, 502, shadow, request targets
-that name another host, callers that hang up, a shadow log that can't be written), parity and the
-diff, and a quote replay with a rule broken on purpose that must fail with a readable diff. They
-also cover an accepted 404 that becomes a 500 and must fail, and the pricing sweep against legacy.
-The index suite checks the chunker, BM25, fusion, gold-range validity and leakage. The hooks suite
-covers shell parsing, blocking with exit code 2, forged reports and recordings, a broken service,
-plans changed after approval, duplicate routes, symlinks and case, global routing changes, failing
-closed, the after-command check and the journal. The service suite covers query parsing against
-Express 4, logged 500s and the SQLite busy timeout. CI runs all of it, plus parity, the hook dry run
-and the eval.
+The 81 tests cover the edge against fake upstreams, parity and its diff (including a rule broken
+on purpose that must fail readably), the pricing sweep against legacy, the index chunker, fusion
+and eval leakage, and the hooks: shell parsing, forged reports, plans changed after approval,
+symlinks, failing closed and the journal.
 
 ## Layout
 
@@ -225,18 +195,13 @@ scripts/         approve, hook dry run, shadow demo
 
 ## What's missing
 
-- **Writes are not migrated.** Booking, cancelling and the admin fuel routes stay on legacy.
-  Shadow can't cover them on a shared database. That would take either a second database the
-  shadow writes into or a corpus thorough enough to flip on directly.
-- **The shell guard is a guardrail, not a sandbox.** Anything that writes from inside an
-  interpreter gets past the pre-check. The after-command check notices the change and tells the
-  agent, but it doesn't undo anything.
+- **Writes are not migrated.** Booking, cancelling and the admin fuel routes stay on legacy;
+  shadow can't cover them on a shared database.
+- **The shell guard is a guardrail, not a sandbox.** Code run inside an interpreter gets past the
+  pre-check; the after-command check notices but doesn't undo.
 - **The eval was written by the person who wrote the code.** The leakage test catches names and
-  copied phrases, not the subtler bias of knowing where the answer is. Big chunks like the
-  50-line quote validator also hurt: four of hybrid's nine plain misses point inside it.
-- **No Postgres.** The schema is plain SQL that would port. The service still runs on
-  `node:sqlite`, and so does the parity harness.
-- **CI hasn't run yet.** The workflow is written but not pushed. In particular, the cold-cache
-  model download on a fresh runner is untested.
+  copied phrases, not the bias of knowing where the answer is.
+- **No Postgres.** The service and the harness run on `node:sqlite`.
+- **CI hasn't run yet.** The workflow is written but not pushed.
 
 MIT licensed.
