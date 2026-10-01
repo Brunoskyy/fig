@@ -72,11 +72,11 @@ To run the pieces by hand, use three terminals from the repo root: `npm run lega
 `npm run service` (4200) and `npm run edge` (4000, the one to call). Stop each with Ctrl+C. They
 share `data/quayside.db`; delete `data/` to reset it.
 
-| Command (repo root) | |
-| --- | --- |
-| `npm test` | 81 tests |
-| `npm run typecheck` / `npm run lint` | `tsc --noEmit` and ESLint |
-| `npm run approve -- <route>` | approve a plan; only you run this |
+| Command (repo root)                  |                                   |
+| ------------------------------------ | --------------------------------- |
+| `npm test`                           | 81 tests                          |
+| `npm run typecheck` / `npm run lint` | `tsc --noEmit` and ESLint         |
+| `npm run approve -- <route>`         | approve a plan; only you run this |
 
 ## How it works
 
