@@ -2,8 +2,8 @@
   "route": "quote",
   "match": "POST /api/v1/quote",
   "passed": true,
-  "ranAt": "2026-10-01T11:41:52.175Z",
-  "serviceHash": "44686af6578d8d3b",
+  "ranAt": "2026-10-01T12:18:02.989Z",
+  "serviceHash": "8e649844a18c0d96",
   "goldenHash": "29d50c51211f927c",
   "ignored": [],
   "counts": {

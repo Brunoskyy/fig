@@ -38,6 +38,11 @@ export class JsonLogger implements LoggerService {
     this.emit('debug', message, context)
   }
 
+  /** An error nothing handled: what it was, where, and for which request. */
+  failure(error: Error, fields: Record<string, unknown>): void {
+    this.emit('error', error.message, 'http', { ...fields, error: error.name, trace: error.stack })
+  }
+
   request(fields: Record<string, unknown>): void {
     this.emit('info', 'request', 'http', fields)
   }

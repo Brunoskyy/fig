@@ -1,9 +1,9 @@
 {
   "route": "ports",
   "match": "GET /api/v1/ports",
-  "recordedAt": "2026-10-01T11:41:12.335Z",
+  "recordedAt": "2026-10-01T12:17:08.595Z",
   "clock": "2016-11-20T10:00:00Z",
-  "corpusHash": "864610f217ae330a",
+  "corpusHash": "c0424f46a1feb699",
   "cases": [
     {
       "name": "all ports, ordered by name",
@@ -123,6 +123,81 @@
           "content-type": "application/json; charset=utf-8"
         },
         "body": "{\"ok\":true,\"count\":0,\"ports\":[]}"
+      }
+    },
+    {
+      "name": "region with brackets is an array of one",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?region[]=EU",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":4,\"ports\":[{\"code\":\"BEANR\",\"name\":\"Antwerp\",\"country\":\"BE\",\"region\":\"EU\"},{\"code\":\"DEHAM\",\"name\":\"Hamburg\",\"country\":\"DE\",\"region\":\"EU\"},{\"code\":\"NLRTM\",\"name\":\"Rotterdam\",\"country\":\"NL\",\"region\":\"EU\"},{\"code\":\"ESVLC\",\"name\":\"Valencia\",\"country\":\"ES\",\"region\":\"EU\"}]}"
+      }
+    },
+    {
+      "name": "region with a key is an object, which matches no region",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?region[x]=EU",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":0,\"ports\":[]}"
+      }
+    },
+    {
+      "name": "nested region object",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?region[a][b]=EU",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":0,\"ports\":[]}"
+      }
+    },
+    {
+      "name": "JSONP callback with brackets still answers JSONP",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?callback[]=loadPorts",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/javascript; charset=utf-8"
+        },
+        "body": "loadPorts({\"ok\":true,\"count\":12,\"ports\":[{\"code\":\"BEANR\",\"name\":\"Antwerp\",\"country\":\"BE\",\"region\":\"EU\"},{\"code\":\"ARBUE\",\"name\":\"Buenos Aires\",\"country\":\"AR\",\"region\":\"SA\"},{\"code\":\"CAHAL\",\"name\":\"Halifax\",\"country\":\"CA\",\"region\":\"NA\"},{\"code\":\"DEHAM\",\"name\":\"Hamburg\",\"country\":\"DE\",\"region\":\"EU\"},{\"code\":\"USNYC\",\"name\":\"New York\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"BRPEC\",\"name\":\"Pecem\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"NLRTM\",\"name\":\"Rotterdam\",\"country\":\"NL\",\"region\":\"EU\"},{\"code\":\"BRSSZ\",\"name\":\"Santos\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"USSAV\",\"name\":\"Savannah\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"CNSHA\",\"name\":\"Shanghai\",\"country\":\"CN\",\"region\":\"ASIA\"},{\"code\":\"SGSIN\",\"name\":\"Singapore\",\"country\":\"SG\",\"region\":\"ASIA\"},{\"code\":\"ESVLC\",\"name\":\"Valencia\",\"country\":\"ES\",\"region\":\"EU\"}]});"
+      }
+    },
+    {
+      "name": "repeated JSONP callback is not an identifier, so JSON",
+      "request": {
+        "method": "GET",
+        "path": "/api/v1/ports?callback=a&callback=b",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "content-type": "application/json; charset=utf-8"
+        },
+        "body": "{\"ok\":true,\"count\":12,\"ports\":[{\"code\":\"BEANR\",\"name\":\"Antwerp\",\"country\":\"BE\",\"region\":\"EU\"},{\"code\":\"ARBUE\",\"name\":\"Buenos Aires\",\"country\":\"AR\",\"region\":\"SA\"},{\"code\":\"CAHAL\",\"name\":\"Halifax\",\"country\":\"CA\",\"region\":\"NA\"},{\"code\":\"DEHAM\",\"name\":\"Hamburg\",\"country\":\"DE\",\"region\":\"EU\"},{\"code\":\"USNYC\",\"name\":\"New York\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"BRPEC\",\"name\":\"Pecem\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"NLRTM\",\"name\":\"Rotterdam\",\"country\":\"NL\",\"region\":\"EU\"},{\"code\":\"BRSSZ\",\"name\":\"Santos\",\"country\":\"BR\",\"region\":\"SA\"},{\"code\":\"USSAV\",\"name\":\"Savannah\",\"country\":\"US\",\"region\":\"NA\"},{\"code\":\"CNSHA\",\"name\":\"Shanghai\",\"country\":\"CN\",\"region\":\"ASIA\"},{\"code\":\"SGSIN\",\"name\":\"Singapore\",\"country\":\"SG\",\"region\":\"ASIA\"},{\"code\":\"ESVLC\",\"name\":\"Valencia\",\"country\":\"ES\",\"region\":\"EU\"}]}"
       }
     }
   ]

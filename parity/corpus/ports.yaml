@@ -18,3 +18,15 @@ cases:
     path: /api/v1/ports?callback=alert(1)//
   - name: repeated region (Express makes it an array)
     path: /api/v1/ports?region=EU&region=AS
+  # Express 4 parses brackets with qs, so these reach the handler as arrays
+  # and objects. The service must parse them the same way.
+  - name: region with brackets is an array of one
+    path: /api/v1/ports?region[]=EU
+  - name: region with a key is an object, which matches no region
+    path: /api/v1/ports?region[x]=EU
+  - name: nested region object
+    path: /api/v1/ports?region[a][b]=EU
+  - name: JSONP callback with brackets still answers JSONP
+    path: /api/v1/ports?callback[]=loadPorts
+  - name: repeated JSONP callback is not an identifier, so JSON
+    path: /api/v1/ports?callback=a&callback=b

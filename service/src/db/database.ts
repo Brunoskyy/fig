@@ -14,8 +14,11 @@ export type Db = DatabaseSync
  * strangler routes traffic, not data. The schema is the legacy one, applied
  * from legacy/db so there is exactly one definition of it.
  */
-export function openDatabase(file: string, options: { seed?: boolean } = {}): Db {
-  const db = new Sqlite(file)
+export function openDatabase(file: string, options: { seed?: boolean; busyTimeoutMs?: number } = {}): Db {
+  // Two processes share the file. Without a busy timeout, a write that meets
+  // the other one's lock fails at once with "database is locked" (a 500)
+  // instead of waiting the few milliseconds the other write takes.
+  const db = new Sqlite(file, { timeout: options.busyTimeoutMs ?? 5000 })
   const dir = join(import.meta.dirname, '..', '..', '..', 'legacy', 'db')
   db.exec(readFileSync(join(dir, 'schema.sql'), 'utf8'))
   const { n } = db.prepare('SELECT COUNT(*) AS n FROM ports').get() as { n: number }

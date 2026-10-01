@@ -17,9 +17,11 @@ export class PortsController {
       ? this.db.prepare('SELECT code, name, country, region FROM ports WHERE region = ? ORDER BY name').all(filter)
       : this.db.prepare('SELECT code, name, country, region FROM ports ORDER BY name').all()
     const body = { ok: true, count: rows.length, ports: rows }
-    // JSONP for the old portal's script tag (Q10).
-    if (typeof callback === 'string' && callback && CALLBACK.test(callback)) {
-      res.type('application/javascript').send(`${callback}(${JSON.stringify(body)});`)
+    // JSONP for the old portal's script tag (Q10). Legacy tests the callback
+    // as a string, so ?callback[]=name (an array of one) answers JSONP too.
+    const name = callback ? String(callback as string) : ''
+    if (name && CALLBACK.test(name)) {
+      res.type('application/javascript').send(`${name}(${JSON.stringify(body)});`)
       return
     }
     res.json(body)

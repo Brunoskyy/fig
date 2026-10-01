@@ -1,5 +1,7 @@
 import { Catch, HttpException, HttpStatus, type ArgumentsHost, type ExceptionFilter } from '@nestjs/common'
-import type { Response } from 'express'
+import type { Request, Response } from 'express'
+
+import type { JsonLogger } from './logger.ts'
 
 /**
  * A request the service rejects on validation, in the legacy wire format
@@ -20,8 +22,15 @@ export class NotFound extends Error {
 
 @Catch()
 export class LegacyErrorsFilter implements ExceptionFilter {
+  constructor(private readonly logger?: JsonLogger) {}
+
   catch(error: unknown, host: ArgumentsHost): void {
     const res = host.switchToHttp().getResponse<Response>()
+    if (res.headersSent) {
+      this.unexpected(error, host)
+      res.destroy()
+      return
+    }
     if (error instanceof LegacyBadRequest) {
       res.status(400).json({ error: 'bad request', detail: error.detail })
       return
@@ -42,7 +51,21 @@ export class LegacyErrorsFilter implements ExceptionFilter {
       return
     }
     // Everything else, including an oversized body, is a bare 500 in the legacy
-    // app too; callers only ever saw that text.
+    // app too; callers only ever saw that text. The cause goes to the log, with
+    // the request id, so the 500 can be found and fixed.
+    this.unexpected(error, host)
     res.status(500).type('text/plain').send('Internal Server Error')
+  }
+
+  private unexpected(error: unknown, host: ArgumentsHost): void {
+    const req = host.switchToHttp().getRequest<Request>()
+    const res = host.switchToHttp().getResponse<Response>()
+    const e = error instanceof Error ? error : new Error(String(error))
+    this.logger?.failure(e, {
+      requestId: res.getHeader('x-request-id'),
+      method: req.method,
+      path: req.originalUrl,
+      type: (error as { type?: string }).type,
+    })
   }
 }
