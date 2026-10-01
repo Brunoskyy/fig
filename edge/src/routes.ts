@@ -39,6 +39,15 @@ export interface CompiledRoute extends RouteConfig {
  */
 export function parseConfig(text: string): EdgeConfig {
   const config = Config.parse(parse(text))
+  // Two entries for one route would be read differently by different tools
+  // (the edge takes the first, a map takes the last), so there may be only one.
+  const seen = new Map<string, string>()
+  for (const r of config.routes) {
+    const key = routeKey(r.match)
+    const before = seen.get(key)
+    if (before !== undefined) throw new Error(`${r.match}: the same route as ${before}, list each route once`)
+    seen.set(key, r.match)
+  }
   for (const r of config.routes) {
     const method = r.match.split(' ')[0]!
     if (r.to === 'shadow' && !SAFE.has(method)) {
@@ -46,6 +55,16 @@ export function parseConfig(text: string): EdgeConfig {
     }
   }
   return config
+}
+
+/** A route's identity: method and path with parameter names erased, so `:id` and `:code` are the same route. */
+export function routeKey(match: string): string {
+  const [method, path] = match.split(' ') as [string, string]
+  const segments = path
+    .replace(/\/+$/, '')
+    .split('/')
+    .map((seg) => (seg.startsWith(':') ? ':' : seg))
+  return `${method} ${segments.join('/') || '/'}`
 }
 
 export function loadConfig(file: string): EdgeConfig {

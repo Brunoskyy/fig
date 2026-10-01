@@ -1,11 +1,12 @@
-import { mkdtempSync, readdirSync, readFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync } from 'node:fs'
 import { createServer, request as httpRequest, type IncomingHttpHeaders, type Server, type ServerResponse } from 'node:http'
+import { connect } from 'node:net'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-import { createEdge } from '../edge/src/proxy.ts'
+import { createEdge, upstreamUrl } from '../edge/src/proxy.ts'
 import { compile, parseConfig, resolve } from '../edge/src/routes.ts'
 import { close, listen } from './helpers.ts'
 
@@ -44,6 +45,15 @@ describe('routes.yaml', () => {
 
   it('refuses shadow mode on a route that writes', () => {
     expect(() => parseConfig(yaml('http://a.test', 'http://b.test', '  - { match: "POST /api/v1/quote", to: shadow }'))).toThrow(/would write twice/)
+  })
+
+  it('refuses the same route listed twice, even with different parameter names', () => {
+    const twice = ['  - { match: "GET /api/v1/bookings/:id", to: shadow }', '  - { match: "GET /api/v1/bookings/:code", to: service }'].join('\n')
+    expect(() => parseConfig(yaml('http://a.test', 'http://b.test', twice))).toThrow(/list each route once/)
+    const same = ['  - { match: "GET /api/v1/ports", to: service }', '  - { match: "GET /api/v1/ports/", to: legacy }'].join('\n')
+    expect(() => parseConfig(yaml('http://a.test', 'http://b.test', same))).toThrow(/list each route once/)
+    const different = ['  - { match: "GET /api/v1/ports", to: service }', '  - { match: "HEAD /api/v1/ports", to: legacy }'].join('\n')
+    expect(() => parseConfig(yaml('http://a.test', 'http://b.test', different))).not.toThrow()
   })
 
   it('refuses an unknown target', () => {
@@ -212,5 +222,104 @@ describe('edge in shadow mode', () => {
     const head = await fetch(`${base}/h`, { method: 'HEAD' })
     expect(head.headers.get('content-length')).toBe('12')
     await Promise.all([close(edge), close(upstream)])
+  })
+})
+
+/** Sends raw bytes and returns what came back, for requests fetch() will not make. */
+function raw(base: string, text: string, options: { end?: boolean } = {}): Promise<string> {
+  const { hostname, port } = new URL(base)
+  return new Promise((ok, ko) => {
+    const socket = connect(Number(port), hostname, () => {
+      socket.write(text)
+      if (options.end === false) {
+        setTimeout(() => {
+          socket.destroy()
+          ok('')
+        }, 50)
+      }
+    })
+    const chunks: Buffer[] = []
+    socket.on('data', (c: Buffer) => chunks.push(c))
+    socket.on('end', () => ok(Buffer.concat(chunks).toString()))
+    socket.on('error', ko)
+  })
+}
+
+describe('edge request targets', () => {
+  it('builds upstream URLs that keep the upstream host', () => {
+    expect(upstreamUrl('http://127.0.0.1:4100', '/api/v1/ports?region=EU').href).toBe('http://127.0.0.1:4100/api/v1/ports?region=EU')
+    expect(upstreamUrl('http://127.0.0.1:4100/base/', '/x').href).toBe('http://127.0.0.1:4100/base/x')
+    expect(() => upstreamUrl('http://127.0.0.1:4100', '//10.0.0.5:8080/internal')).toThrow(/origin-form/)
+    expect(() => upstreamUrl('http://127.0.0.1:4100', 'http://10.0.0.5:8080/internal')).toThrow(/origin-form/)
+  })
+
+  it('answers 400 to scheme-relative and absolute-form targets and never reaches the other host', async () => {
+    let internalHits = 0
+    const internal = createServer((_, res) => {
+      internalHits += 1
+      res.end('secret')
+    })
+    const legacy = echo('legacy')
+    const i = await listen(internal)
+    const l = await listen(legacy)
+    const edge = createEdge({
+      config: parseConfig(yaml(l, l, '  - { match: "GET /x", to: service }')),
+      shadowDir: mkdtempSync(join(tmpdir(), 'fig-shadow-')),
+      log: () => {},
+    })
+    const base = await listen(edge)
+    const host = new URL(i).host
+    for (const target of [`//${host}/internal`, `http://${host}/internal`]) {
+      const answer = await raw(base, `GET ${target} HTTP/1.1\r\nHost: edge\r\nConnection: close\r\n\r\n`)
+      expect(answer).toMatch(/^HTTP\/1\.1 400 /)
+      expect(answer).toContain('BAD_REQUEST')
+      expect(answer).not.toContain('secret')
+    }
+    expect(internalHits).toBe(0)
+    // An ordinary request still goes through.
+    expect((await fetch(`${base}/x`)).headers.get('x-upstream')).toBe('legacy')
+    await Promise.all([close(edge), close(legacy), close(internal)])
+  })
+})
+
+describe('edge failures stay inside the request', () => {
+  it('survives a caller that hangs up halfway through the body', async () => {
+    const legacy = echo('legacy')
+    const l = await listen(legacy)
+    const lines: Record<string, unknown>[] = []
+    const edge = createEdge({
+      config: parseConfig(yaml(l, l, '  - { match: "POST /q", to: legacy }')),
+      shadowDir: mkdtempSync(join(tmpdir(), 'fig-shadow-')),
+      log: (line) => lines.push(line),
+    })
+    const base = await listen(edge)
+    await raw(base, 'POST /q HTTP/1.1\r\nHost: edge\r\nContent-Type: application/json\r\nContent-Length: 500\r\n\r\n{"from":', { end: false })
+    await new Promise((r) => setTimeout(r, 50))
+    // Node reports the hang-up as an 'aborted' error on the request; it is logged, not thrown.
+    expect(lines).toContainEqual(expect.objectContaining({ route: 'edge', url: '/q', error: expect.any(String) }))
+    // The edge is still up.
+    expect((await fetch(`${base}/q`, { method: 'POST', body: '{}' })).status).toBe(200)
+    await Promise.all([close(edge), close(legacy)])
+  })
+
+  it('keeps answering shadowed callers when the shadow log cannot be written', async () => {
+    const legacy = echo('legacy')
+    const service = echo('service')
+    const l = await listen(legacy)
+    const s = await listen(service)
+    const shadowDir = mkdtempSync(join(tmpdir(), 'fig-shadow-'))
+    // The log file's name is taken by a directory, so every append fails with EISDIR.
+    mkdirSync(join(shadowDir, 'get-x.jsonl'))
+    const lines: Record<string, unknown>[] = []
+    const edge = createEdge({ config: parseConfig(yaml(l, s, '  - { match: "GET /x", to: shadow }')), shadowDir, log: (line) => lines.push(line) })
+    const base = await listen(edge)
+    for (let n = 0; n < 2; n++) {
+      const res = await fetch(`${base}/x`)
+      expect(res.status).toBe(200)
+      expect(((await res.json()) as { from: string }).from).toBe('legacy')
+    }
+    await new Promise((r) => setTimeout(r, 50))
+    expect(lines.filter((l) => String(l.error).startsWith('shadow log failed')).length).toBe(2)
+    await Promise.all([close(edge), close(legacy), close(service)])
   })
 })
