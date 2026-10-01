@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.DS_Store
+*.db
+*.db-*
+data/
+.env
+# Embedding models are cached outside the repo; the index cache is rebuilt locally.
+index/.cache/
+*.onnx

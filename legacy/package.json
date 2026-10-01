@@ -1,0 +1,8 @@
+{
+  "name": "quayside-api",
+  "version": "1.9.3",
+  "private": true,
+  "description": "Quayside shipping quotes and bookings (internal)",
+  "type": "commonjs",
+  "main": "app.js"
+}
